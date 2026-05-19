@@ -3,19 +3,27 @@ import axios from "axios"
 import storeAuth from "./storeAuth"
 import { toast } from "react-toastify"
 
-const storeProfile = create((set) => ({
+const storeProfile = create((set, get) => ({
     user: null,
     setUser: (datos) => set({ user: datos }),
     
     profile: async () => {
         try {
             const { token } = storeAuth.getState()
-            if (!token) return null
+            if (!token) {
+                console.error("No se encontró un token de autenticación válido.")
+                return null
+            }
             const baseUrl = import.meta.env.VITE_BACKEND_URL
             const response = await axios.get(`${baseUrl}/perfil`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
-            set({ user: response.data })
+            const datosActualizados = response.data.administradorBDD ||
+                                      response.data.estudiantesBDD ||
+                                      response.data.docenteBDD ||
+                                      response.data
+
+            set({ user: datosActualizados })
             return response.data
         } catch (error) {
             console.log("Error en la petición:", error.response.data);
@@ -46,7 +54,7 @@ const storeProfile = create((set) => ({
             })
 
             const datosactualizados = response.data.administradorBDD ||
-                                    response.data.estudianteBDD ||
+                                    response.data.estudiantesBDD ||
                                     response.data.docenteBDD ||
                                     response.data
 

@@ -31,7 +31,6 @@ const List = () => {
                         <p className="text-gray-600 mt-2">Ver listado de eventos</p>
                     </div>
                 </Link>
-                {/*
                 <Link 
                     to="/dashboard/list/docentes"
                     className="bg-white border-2 border-purple-500 p-6 rounded-lg shadow-lg hover:bg-blue-50 hover:scale-105 transition-all"
@@ -42,7 +41,6 @@ const List = () => {
                         <p className="text-gray-600 mt-2">Ver listado de docentes</p>
                     </div>
                 </Link>
-                */}
                 <Link 
                     to="/dashboard/list/estudiantes"
                     className="bg-white border-2 border-purple-500 p-6 rounded-lg shadow-lg hover:bg-blue-50 hover:scale-105 transition-all block"

@@ -25,6 +25,8 @@ const Login = () => {
         return `${baseUrl}/admin/login`;
       case "docente":
         return `${baseUrl}/docente/login`;
+        case "user":
+        return `${baseUrl}/estudiantes/login`;
       default:
         return `${baseUrl}/login`;
     }
@@ -32,6 +34,10 @@ const Login = () => {
 
   const loginUser = async (dataForm) => {
     const url = getLoginUrl(selectedRol);
+    const dataWithRol = {
+      ...dataForm,
+      rol: selectedRol
+    };
     const response = await fetchDataBackend(url, dataForm, "POST");
 
     if (response && response.token) {

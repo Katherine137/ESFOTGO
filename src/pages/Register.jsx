@@ -19,10 +19,11 @@ export const Register = () => {
 
   const registerUser = async (dataForm) => {
     const baseUrl = import.meta.env.VITE_BACKEND_URL;
-    let url = `${baseUrl}/registro`;
+    let url = "";
 
     if (dataForm.rol === "admin") url = `${baseUrl}/admin/registro`;
     if (dataForm.rol === "docente") url = `${baseUrl}/docente/registro`;
+    if (dataForm.rol === "user") url = `${baseUrl}/estudiantes/registro`;
 
     const response = await fetchDataBackend(url, dataForm, "POST");
 
