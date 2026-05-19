@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;900&family=Roboto:wght@400;700;900&display=swap');
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+@keyframes flameMove {
+  0% {
+    transform: translateY(0px) scale(1);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.03);
+    filter: hue-rotate(10deg);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    filter: hue-rotate(0deg);
+  }
+}
+
+.flame-animation {
+  animation: flameMove 3s ease-in-out infinite;
+}
