@@ -184,6 +184,8 @@ export const Register = () => {
                     </p>
                 )}
             </div>
+            
+    
 
             {/* PASSWORD */}
             <div>
