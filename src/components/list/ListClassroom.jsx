@@ -47,7 +47,7 @@ const ListClassroom = () => {
             
             <thead className="bg-gray-800 text-slate-400">
                 <tr>
-                    {["N°", "Número", "Ubicación", "Tipo", "Edificio", "Acciones"].map((header) => (
+                    {["N°", "Número", "Ubicación", "Tipo", "Edificio"].map((header) => (
                         <th key={header} className="p-2">{header}</th>
                     ))}
                 </tr>
@@ -70,23 +70,6 @@ const ListClassroom = () => {
                                 </span>
                             </td>
                             <td>{aula.edificio?.nombre || aula.edificio || 'N/A'}</td>
-                            <td className='py-2 text-center'>
-                                <MdPublishedWithChanges
-                                    title="Actualizar"
-                                    className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2
-                                    hover:text-blue-600"
-                                />
-                                <MdInfo
-                                    title="Más información"
-                                    className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2
-                                    hover:text-green-600"
-                                />
-                                <MdDeleteForever
-                                    title="Eliminar"
-                                    className="h-7 w-7 text-red-900 cursor-pointer inline-block
-                                    hover:text-red-600"
-                                />
-                            </td>
                         </tr>
                     ))
                 }

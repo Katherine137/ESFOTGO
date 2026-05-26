@@ -1,40 +1,40 @@
 import storeProfile from "../../context/storeProfile"
 
 export const CardProfile = () => {
-
     const { user } = storeProfile()
+
     return (
-
-        <div className="bg-white border border-slate-200 w-auto h-auto p-4 
-                        flex flex-col items-center justify-between shadow-xl rounded-lg">
-
-            <div className="relative">
-
-                <img src="/dragon_logo_1.png" alt="img-client" className="m-auto rounded-full border-2 border-gray-300 w-30" />
-                
-                <label className="absolute bottom-0 right-0 bg-blue-400  text-white rounded-full p-2 cursor-pointer hover:bg-emerald-400">📷
+        <div >
+            <div className="relative mb-6">
+                <img 
+                    src="/dragon_logo_1.png" 
+                    alt="img-client" 
+                    className="m-auto rounded-full w-32 h-32 object-cover" 
+                />
+                <label className="absolute bottom-1 right-1 bg-blue-500 text-white rounded-full p-2.5 cursor-pointer hover:bg-emerald-500 transition-colors">
+                    📷
                     <input type="file" accept="image/*" className="hidden" />
                 </label>
-
             </div>
 
-
-            <div className="self-start">
-                <b>Nombre:</b><p className="inline-block ml-3">{user?.nombre}</p>
+            <div className="w-full space-y-4 text-slate-700">
+                <div className="flex">
+                    <b className="w-24 text-slate-400 font-medium">Nombre:</b>
+                    <p className="font-semibold text-blue-950">{user?.nombre}</p>
+                </div>
+                <div className="flex">
+                    <b className="w-24 text-slate-400 font-medium">Apellido:</b>
+                    <p className="font-semibold text-blue-950">{user?.apellido}</p>
+                </div>
+                <div className="flex">
+                    <b className="w-24 text-slate-400 font-medium">Teléfono:</b>
+                    <p className="font-semibold text-blue-950">{user?.telefono}</p>
+                </div>
+                <div className="flex">
+                    <b className="w-24 text-slate-400 font-medium">Correo:</b>
+                    <p className="font-semibold text-blue-950">{user?.email}</p>
+                </div>
             </div>
-
-            <div className="self-start">
-                <b>Apellido:</b><p className="inline-block ml-3">{user?.apellido}</p>
-            </div >
-
-            <div className="self-start">
-                <b>Teléfono:</b><p className="inline-block ml-3">{user?.telefono}</p>
-            </div>
-
-            <div className="self-start">
-                <b>Correo:</b><p className="inline-block ml-3">{user?.email}</p>
-            </div>
-        
         </div>
     )
 }

@@ -68,13 +68,22 @@ const Dashboard = () => {
                         alt="usuario" 
                     />
                 </div>
-                    
-                <button
-                    onClick={handleLogout}
-                    className="bg-red-700 text-white px-4 md:px-6 py-2 rounded-xl shadow-md hover:bg-red-800 hover:scale-105 transition-transform duration-200"
-                >
-                    Salir
-                </button>
+
+                <div className="flex items-center gap-5 w-fit">
+                    <Link 
+                        to='/dashboard/profile' 
+                        className="bg-indigo-600 text-white px-4 md:px-4 py-1 rounded-4xl shadow-md hover:bg-indigo-700 hover:scale-105 transition-transform duration-200"
+                    >
+                        Mi Perfil
+                    </Link>
+                        
+                    <button
+                        onClick={handleLogout}
+                        className="bg-red-700 text-white px-4 md:px-6 py-2 rounded-4xl shadow-md hover:bg-red-800 hover:scale-105 transition-transform duration-200"
+                    >
+                        Salir
+                    </button>
+                </div>
             </div>
             
             <div className="flex mt-16 flex-1">
@@ -110,17 +119,6 @@ const Dashboard = () => {
                                 }`}
                             >
                                 Dashboard
-                            </Link>
-
-                            <Link
-                                to='/dashboard/profile'
-                                className={`w-full text-center py-3 rounded-lg border-2 shadow-lg transition-all ${
-                                    urlActual === '/dashboard/profile'
-                                        ? 'bg-blue-400 text-blue-950 border-blue-500 font-semibold'
-                                        : 'border-white hover:bg-blue-400 text-gray-600'
-                                }`}
-                            >
-                                Perfil
                             </Link>
                             
                             <Link
