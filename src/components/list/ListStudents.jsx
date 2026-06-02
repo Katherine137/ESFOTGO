@@ -176,13 +176,6 @@ const ListStudent = () => {
                                 <td className="p-2">{estudiante.email}</td>
                                 <td className="p-2 flex justify-center gap-3">
                                     <button 
-                                        onClick={() => handleActualizarEstudiante(estudiante._id)}
-                                        className="text-blue-600 hover:text-blue-800 text-2xl"
-                                        disabled={deletingAll}
-                                    >
-                                        <MdPublishedWithChanges />
-                                    </button>
-                                    <button 
                                         onClick={() => handleEliminarEstudiante(estudiante._id, estudiante.nombre, estudiante.apellido)}
                                         className="text-red-600 hover:text-red-800 text-2xl"
                                         disabled={deletingAll}
