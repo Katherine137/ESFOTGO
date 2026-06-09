@@ -12,10 +12,9 @@ const FormEvent = () => {
         setMessage({ type: '', text: '' });
 
         try {
-            const baseURL = import.meta.env.VITE_BACKEND_URL || 'https://esfotgo-backend77.onrender.com';
-            const url = `${baseURL}/evento`;
+            const baseURL = import.meta.env.VITE_BACKEND_URL;
+            const url = `${baseURL}/admin/evento`;
 
-            // Enviamos la petición sin token (pública)
             const response = await axios.post(url, dataForm, {
                 headers: { 'Content-Type': 'application/json' }
             });

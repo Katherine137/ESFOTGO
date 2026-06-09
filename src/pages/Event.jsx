@@ -19,8 +19,8 @@ const Event = () => {
         try {
             const baseURL = import.meta.env.VITE_BACKEND_URL
             const response = await axios.get(`${baseURL}/eventos`)
-
-            setEventos(response.data)
+            console.log('Respuesta del servidor:', response.data);
+            setEventos(Array.isArray(response.data) ? response.data : response.data.eventos || []);
         } catch (error) {
             console.error('Error al obtener eventos:', error)
             setError('La ruta/eventos no fue encontrada en el servidor.')

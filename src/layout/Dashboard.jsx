@@ -132,20 +132,19 @@ const Dashboard = () => {
                                 Eventos
                             </Link>
 
-                            {/* 
+
                             {(rol === 'admin') && (
                                 <Link
-                                    to='/dashboard/classroom'
+                                    to='/dashboard/mapcreate'
                                     className={`w-full text-center py-3 rounded-lg border-2 shadow-lg transition-all ${
-                                        urlActual.includes('/classroom')
+                                        urlActual.includes('/mapcreate')
                                             ? 'bg-blue-400 text-blue-950 border-blue-500 font-semibold'
                                             : 'border-white hover:bg-blue-400 text-gray-600'
                                     }`}
                                 >
-                                    Aulas
+                                    Mapa
                                 </Link>
                             )}
-*/}
 {/* 
                             {(rol === 'admin') && (
                             <Link

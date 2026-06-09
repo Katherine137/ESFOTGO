@@ -33,40 +33,36 @@ const storeProfile = create((set, get) => ({
 
     updateProfile: async (data) => {
         try {
-            // 1. Obtenemos el token de auth
-            const { token, rol } = storeAuth.getState()
-            // 2. IMPORTANTE: Obtenemos el usuario de ESTE store (storeProfile)
-            // O usamos el que ya tenemos en el estado local del set/get
-            const { user } = get()
-            const id = user?._id || user?.id
+            const { token, rol } = storeAuth.getState();
+            const { user } = get();
+            const id = user?._id || user?.id;
 
             if (!id || !rol || !token) {
-                console.error("Falta datos criticos", { token, id, rol })
-                toast.error("Error de sesión: No se encontró ID o Rol")
-                return null
+                toast.error("Error de sesión: No se encontró ID o Rol");
+                return null;
             }
 
-            const baseUrl = import.meta.env.VITE_BACKEND_URL
-            const url = `${baseUrl}/actualizarperfil/${id}`
+            const baseUrl = import.meta.env.VITE_BACKEND_URL;
+            const url = `${baseUrl}/actualizarperfil/${id}`;
             
             const response = await axios.put(url, data, {
                 headers: { Authorization: `Bearer ${token}` }
-            })
+            });
 
-            const datosactualizados = response.data.administradorBDD ||
+            // Corregido: nombre de variable consistente
+            const datosActualizados = response.data.administradorBDD ||
                                     response.data.estudiantesBDD ||
                                     response.data.docenteBDD ||
-                                    response.data
+                                    response.data;
 
-            set({ user: datosActualizados })
-            toast.success("Perfil actualizado con éxito")
-            return response.data
+            set({ user: datosActualizados }); // Ahora sí actualizará el estado correctamente
+            return response.data;
 
         } catch (error) {
-            const mensajeError = error.response ? error.response.data.msg : error.message;
-            console.error("Error en la petición:", error.response)
-            toast.error(error.response?.data?.msg || "Error al actualizar perfil")
-            return null
+            console.error("Error al actualizar:", error.response?.data);
+            const mensajeError = error.response?.data?.msg || "Error al actualizar perfil";
+            toast.error(mensajeError);
+            throw error; // Lanza el error para que el componente FormularioPerfil pueda manejarlo
         }
     },
 

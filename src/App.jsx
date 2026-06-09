@@ -25,6 +25,7 @@ import ListClassroom from './components/List/ListClassroom'
 import ListEvents from './components/List/ListEvents'
 import ListTeacher from './components/List/ListTeacher'
 import ListStudent from './components/List/ListStudents'
+import MapCreate from './components/Mapcreate'
 
 function App() {
   const { profile } = storeProfile()
@@ -64,6 +65,7 @@ function App() {
           <Route path='list/eventos' element={<ListEvents/>}/>
           <Route path='list/docentes' element={<ListTeacher/>}/>
           <Route path='list/estudiantes' element={<ListStudent/>}/>
+          <Route path='mapcreate' element={<MapCreate/>}/>
         </Route>
       </Routes>
 

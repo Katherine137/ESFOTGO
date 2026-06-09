@@ -1,4 +1,4 @@
-export const CardEvent = ({ event }) => {
+export const CardEvent = ({ evento }) => {
 
     return (
         <div className="bg-white border border-slate-200 w-auto h-auto p-4 
@@ -6,7 +6,7 @@ export const CardEvent = ({ event }) => {
 
             <div className="relative">
                 <img 
-                    src={event?.imagen || "/dragon_logo_1.png"} 
+                    src={evento?.imagen || "/dragon_logo_1.png"} 
                     alt="img-event" 
                     className="m-auto rounded-full border-2 border-gray-300 w-30" 
                 />
@@ -19,32 +19,32 @@ export const CardEvent = ({ event }) => {
 
             <div className="self-start">
                 <b>Nombre:</b>
-                <p className="inline-block ml-3">{event?.nombre}</p>
+                <p className="inline-block ml-3">{evento?.nombre}</p>
             </div>
 
             <div className="self-start">
                 <b>Organizador:</b>
-                <p className="inline-block ml-3">{event?.organizador}</p>
+                <p className="inline-block ml-3">{evento?.organizador}</p>
             </div>
 
             <div className="self-start">
                 <b>Ubicación:</b>
-                <p className="inline-block ml-3">{event?.ubicacion}</p>
+                <p className="inline-block ml-3">{evento?.ubicacion}</p>
             </div>
 
             <div className="self-start">
                 <b>Fecha:</b>
-                <p className="inline-block ml-3">{event?.fecha}</p>
+                <p className="inline-block ml-3">{evento?.fecha}</p>
             </div>
 
             <div className="self-start">
                 <b>Hora:</b>
-                <p className="inline-block ml-3">{event?.hora}</p>
+                <p className="inline-block ml-3">{evento?.hora}</p>
             </div>
 
             <div className="self-start">
                 <b>Información:</b>
-                <p className="inline-block ml-3">{event?.informacion}</p>
+                <p className="inline-block ml-3">{evento?.informacion}</p>
             </div>
         
         </div>

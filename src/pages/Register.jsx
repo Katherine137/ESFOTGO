@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -14,8 +14,46 @@ export const Register = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
+    reset,
     formState: { errors }
   } = useForm();
+
+  const rolValue = watch("rol"); 
+  const emailValue = watch("email");
+
+  useEffect(() => {
+    const buscarPerfil = async () =>{
+      if (emailValue && /^[a-z._%+-]+@epn\.edu\.ec$/.test(emailValue)) {
+        const baseUrl = import.meta.env.VITE_BACKEND_URL;
+        let endpoint = "";
+        if (rolValue == "docente") {
+          endpoint = `${baseUrl}/buscarDocente?email=${emailValue}`;
+        } else if (rolValue === "user") {
+          endpoint = `${baseUrl}/buscarEstudiante?email=${emailValue}`;
+        }
+        console.log("Intentando conectar a:", endpoint);
+        if (endpoint) {
+          try {
+            const userData = await fetchDataBackend(endpoint, null, "GET");
+            if (userData) {
+              setValue("nombre", userData.nombre);
+              setValue("apellido", userData.apellido);
+            }
+          } catch (error) {
+            console.error("Error al buscar el perfil:", error);
+          }
+        }
+      }
+    };
+
+    const delayDebounceFn = setTimeout(() => {
+      buscarPerfil();
+    }, 800);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [emailValue, rolValue, setValue, fetchDataBackend]);
 
   const registerUser = async (dataForm) => {
     const baseUrl = import.meta.env.VITE_BACKEND_URL;
