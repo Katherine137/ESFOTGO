@@ -9,21 +9,23 @@ const ListEvents = () => {
     const { token } = storeAuth()
 
     const listEventos = async () => {
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/eventos`
-            const response = await axios.get(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-            setEventos(response.data)
-        } catch (error) {
-            console.error('Error al cargar eventos:', error)
-        } finally {
-            setLoading(false)
-        }
+    try {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/eventos`
+        const response = await axios.get(url, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        // ✅ El array puede estar en response.data.data o directo en response.data
+        const data = response.data?.data || response.data
+        setEventos(Array.isArray(data) ? data : [])
+    } catch (error) {
+        console.error('Error al cargar eventos:', error)
+    } finally {
+        setLoading(false)
     }
+}
 
     useEffect(() => {
         listEventos()

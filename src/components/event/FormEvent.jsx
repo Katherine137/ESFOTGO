@@ -13,7 +13,7 @@ const FormEvent = () => {
 
         try {
             const baseURL = import.meta.env.VITE_BACKEND_URL;
-            const url = `${baseURL}/admin/evento`;
+            const url = `${baseURL}/eventos`;
 
             const response = await axios.post(url, dataForm, {
                 headers: { 'Content-Type': 'application/json' }
@@ -25,8 +25,8 @@ const FormEvent = () => {
         } catch (error) {
             console.error('Error en el registro:', error);
             const errorMsg = error.response?.data?.message || 
-                             error.response?.data?.error || 
-                             'Error al conectar con el servidor';
+                            error.response?.data?.error || 
+                            'Error al conectar con el servidor';
             setMessage({ type: 'error', text: errorMsg });
         } finally {
             setLoading(false);
