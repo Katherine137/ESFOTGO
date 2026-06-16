@@ -9,20 +9,19 @@ const Dashboard = () => {
     const navigate = useNavigate()
     const urlActual = location.pathname
     
-    const { logout, token, user: authUser } = storeAuth()
+    const { logout, token, rol } = storeAuth()
     const { user: profileUser, profile } = storeProfile()
     
-    const user = profileUser || authUser
-    const rol = user?.rol // Extraemos el rol para facilitar las validaciones
+    const user = profileUser 
     
     const [sidebarOpen, setSidebarOpen] = useState(true)
 
     useEffect(() => {
-        if (token && !profileUser) {
+        if (token && rol) {
             profile()
         }
-    }, [token, profileUser, profile])
-
+    }, [token, rol])
+    
     const handleLogout = () => {
         if (typeof logout === 'function') {
             logout()

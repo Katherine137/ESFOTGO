@@ -26,6 +26,7 @@ import ListEvents from './components/List/ListEvents'
 import ListTeacher from './components/List/ListTeacher'
 import ListStudent from './components/List/ListStudents'
 import MapCreate from './components/Mapcreate'
+import CardUpdate from './components/event/CardUpdate'
 
 function App() {
   const { profile } = storeProfile()
@@ -60,6 +61,7 @@ function App() {
           <Route path='classroom' element={<Classroom/>}/>
           <Route path='teacher' element={<Teacher/>}/>
           <Route path='tutoring' element={<Tutoring/>}/>
+          <Route path='actualizarevento/:id' element={<CardUpdate/>}/>
           <Route path='list' element={<List/>}/>
           <Route path='list/aulas' element={<ListClassroom/>}/>
           <Route path='list/eventos' element={<ListEvents/>}/>

@@ -3,8 +3,6 @@ import { MapContainer, TileLayer, CircleMarker, useMapEvents } from 'react-leafl
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Mover la configuración del icono fuera del componente 
-// o usar un useEffect para inicializarlo una sola vez
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 

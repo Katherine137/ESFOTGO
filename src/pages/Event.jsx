@@ -4,6 +4,7 @@ import { CardEvent } from "../components/event/CardEvent"
 import CardUpdate from "../components/event/CardUpdate"
 import FormEvent from "../components/event/FormEvent"
 import { useNavigate } from 'react-router'
+import storeAuth from "../context/storeAuth"
 
 const Event = () => {
     const [eventos, setEventos] = useState([])
@@ -11,7 +12,7 @@ const Event = () => {
     const [error, setError] = useState(null)
 
     const navigate = useNavigate()
-    const rol = localStorage.getItem('rol')
+    const { rol } = storeAuth()
 
     const obtenerEventos = async () => {
         setLoading(true)
@@ -20,7 +21,7 @@ const Event = () => {
             const baseURL = import.meta.env.VITE_BACKEND_URL
             const response = await axios.get(`${baseURL}/eventos`)
             console.log('Respuesta del servidor:', response.data);
-            setEventos(Array.isArray(response.data) ? response.data : response.data.eventos || []);
+            setEventos(Array.isArray(response.data) ? response.data : response.data.data || response.data.eventos || []);
         } catch (error) {
             console.error('Error al obtener eventos:', error)
             setError('La ruta/eventos no fue encontrada en el servidor.')
@@ -30,13 +31,16 @@ const Event = () => {
     }
 
     useEffect(() => {
-        if (rol === null) return
+        if (!rol) {
+            navigate('/login')
+            return
+        }
         if (rol !== 'admin') {
             navigate('/dashboard')
-        }else{
-            obtenerEventos()
-        }   
-    }, [rol, navigate])
+            return
+        }
+        obtenerEventos()
+    }, [rol])
 
     const onEventoCreado = () => {
         obtenerEventos() 
@@ -63,18 +67,21 @@ const Event = () => {
             ) : (
                 <>
                     {/* Mostrar eventos existentes */}
-                    <div className='flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap mb-8'>
-                        {eventos.length > 0 ? (
-                            eventos.slice(0, 2).map((evento) => (
-                                <div key={evento._id} className="w-full md:w-1/2">
-                                    <CardEvent evento={evento} />
-                                </div>
-                            ))
-                        ) : (
-                            <div className="w-full text-center py-8">
-                                <p className="text-gray-500">No hay eventos registrados aún</p>
-                            </div>
-                        )}
+                    <div className="container mx-auto px-4 mb-12">
+                        <h1 className='font-black text-4xl text-blue-950 mb-8'>Eventos Registrados</h1>
+                        
+                        <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100">
+                            {eventos.length > 0 ? (
+                                eventos.map((evento) => (
+                                    // Añadimos min-w-[300px] para asegurar que la card no se aplaste
+                                    <div key={evento._id} className="min-w-[300px] md:min-w-[350px]">
+                                        <CardEvent evento={evento} />
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-500 text-center w-full py-8">No hay eventos registrados aún</p>
+                            )}
+                        </div>
                     </div>
 
                     <br />
@@ -85,9 +92,6 @@ const Event = () => {
                             <FormEvent onEventoCreado={onEventoCreado} />
                         </div>
 
-                        <div className='w-full md:w-1/2'>
-                            <CardUpdate />
-                        </div>
                     </div>
                 </>
             )}

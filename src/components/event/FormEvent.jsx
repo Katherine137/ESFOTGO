@@ -2,10 +2,24 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useState } from 'react';
 
-const FormEvent = () => {
+const FormEvent = ({ onEventoCreado }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+    const [imagenPreview, setImagenPreview] = useState(null);
+    const [imagenBase64, setImagenBase64] = useState(null);
+
+    const handleImagenChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagenPreview(reader.result);       // para mostrar preview
+            setImagenBase64(reader.result);        // base64 completo con prefijo
+        };
+        reader.readAsDataURL(file);
+    };
 
     const registerEventForm = async (dataForm) => {
         setLoading(true);
@@ -13,28 +27,35 @@ const FormEvent = () => {
 
         try {
             const baseURL = import.meta.env.VITE_BACKEND_URL;
-            const url = `${baseURL}/eventos`;
+            const url = `${baseURL}/admin/evento`; // ← ruta correcta
 
-            const response = await axios.post(url, dataForm, {
+            const payload = {
+                ...dataForm,
+                fecha: dataForm.fecha ? new Date(dataForm.fecha).toISOString().split('T')[0] : dataForm.fecha
+            };
+            if (imagenBase64) {
+                payload.subirBase64Evento = imagenBase64;
+            }
+
+            await axios.post(url, payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
 
             setMessage({ type: 'success', text: 'Evento creado exitosamente' });
             reset();
+            setImagenPreview(null);
+            setImagenBase64(null);
+            if (onEventoCreado) onEventoCreado();
 
         } catch (error) {
             console.error('Error en el registro:', error);
-            const errorMsg = error.response?.data?.message || 
-                            error.response?.data?.error || 
+            const errorMsg = error.response?.data?.message ||
+                            error.response?.data?.error ||
                             'Error al conectar con el servidor';
             setMessage({ type: 'error', text: errorMsg });
         } finally {
             setLoading(false);
         }
-    };
-
-    const onSubmit = (data) => {
-        registerEventForm(data);
     };
 
     return (
@@ -43,15 +64,37 @@ const FormEvent = () => {
 
             {message.text && (
                 <div className={`mb-4 p-3 rounded border ${
-                    message.type === 'success' 
-                    ? 'bg-green-100 text-green-700 border-green-400' 
+                    message.type === 'success'
+                    ? 'bg-green-100 text-green-700 border-green-400'
                     : 'bg-red-100 text-red-700 border-red-400'
                 }`}>
                     {message.text}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(registerEventForm)} className="space-y-4">
+
+                {/* Campo: imagen */}
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Imagen del Evento</label>
+                    <div className="flex flex-col items-center gap-3">
+                        {imagenPreview ? (
+                            <img src={imagenPreview} alt="preview" className="w-32 h-32 object-cover rounded-full border-2 border-blue-300" />
+                        ) : (
+                            <div className="w-32 h-32 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm">
+                                Sin imagen
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImagenChange}
+                            disabled={loading}
+                            className="text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+                        />
+                    </div>
+                </div>
+
                 {/* Campo: nombre */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre del Evento</label>
@@ -59,8 +102,11 @@ const FormEvent = () => {
                         type="text"
                         placeholder="Ej: Taller de Redes"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("nombre", { required: "El nombre es obligatorio" })}
-                        disabled={loading}
+                        {...register("nombre", { 
+                            required: "El nombre es obligatorio",
+                            minLength: { value: 3, message: "El nombre debe tener al menos 3 caracteres" },
+                            maxLength: { value: 150, message: "El nombre no puede superar 150 caracteres" }
+                        })}
                     />
                     {errors.nombre && <span className="text-red-600 text-xs">{errors.nombre.message}</span>}
                 </div>
@@ -72,8 +118,10 @@ const FormEvent = () => {
                         type="text"
                         placeholder="Ej: Rama IEEE"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("organizador", { required: "El organizador es obligatorio" })}
-                        disabled={loading}
+                        {...register("organizador", { 
+                            required: "El organizador es obligatorio",
+                            minLength: { value: 3, message: "El organizador debe tener al menos 3 caracteres" }
+                        })}
                     />
                     {errors.organizador && <span className="text-red-600 text-xs">{errors.organizador.message}</span>}
                 </div>
@@ -84,6 +132,7 @@ const FormEvent = () => {
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Fecha</label>
                         <input
                             type="date"
+                            min={new Date().toISOString().split('T')[0]}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
                             {...register("fecha", { required: "La fecha es obligatoria" })}
                             disabled={loading}
@@ -94,6 +143,7 @@ const FormEvent = () => {
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Hora</label>
                         <input
                             type="time"
+                            min={new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
                             {...register("hora", { required: "La hora es obligatoria" })}
                             disabled={loading}
@@ -108,19 +158,27 @@ const FormEvent = () => {
                         type="text"
                         placeholder="Ej: Auditorio de Sistemas"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("ubicacion", { required: "La ubicación es obligatoria" })}
-                        disabled={loading}
+                        {...register("ubicacion", { 
+                            required: "La ubicación es obligatoria",
+                            minLength: { value: 3, message: "La ubicación debe tener al menos 3 caracteres" },
+                            maxLength: { value: 200, message: "La ubicación no puede superar 200 caracteres" }
+                        })}
                     />
+                    {errors.ubicacion && <span className="text-red-600 text-xs">{errors.ubicacion.message}</span>}
                 </div>
 
-                {/* Campo: informacion (IMPORTANTE: Debe llamarse así para el backend) */}
+                {/* Campo: informacion */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Información Adicional</label>
                     <textarea
                         placeholder="Detalles del evento..."
                         rows="3"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("informacion", { required: "La información es obligatoria" })}
+                        {...register("informacion", { 
+                            required: "La información es obligatoria",
+                            minLength: { value: 10, message: "La información debe tener al menos 10 caracteres" },
+                            maxLength: { value: 2000, message: "La información no puede superar 2000 caracteres" }
+                        })}
                         disabled={loading}
                     />
                     {errors.informacion && <span className="text-red-600 text-xs">{errors.informacion.message}</span>}

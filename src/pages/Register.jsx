@@ -37,9 +37,10 @@ export const Register = () => {
         if (endpoint) {
           try {
             const userData = await fetchDataBackend(endpoint, null, "GET");
-            if (userData) {
-              setValue("nombre", userData.nombre);
-              setValue("apellido", userData.apellido);
+            console.log("userData recibido:", userData);
+            if (userData && userData.data) {
+              setValue("nombre", userData.data.nombre, { shouldValidate: true, shouldDirty: true });
+              setValue("apellido", userData.data.apellido, { shouldValidate: true, shouldDirty: true });
             }
           } catch (error) {
             console.error("Error al buscar el perfil:", error);
@@ -53,7 +54,7 @@ export const Register = () => {
     }, 800);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [emailValue, rolValue, setValue, fetchDataBackend]);
+  }, [emailValue, rolValue]);
 
   const registerUser = async (dataForm) => {
     const baseUrl = import.meta.env.VITE_BACKEND_URL;

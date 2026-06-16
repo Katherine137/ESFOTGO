@@ -9,24 +9,35 @@ const storeProfile = create((set, get) => ({
     
     profile: async () => {
         try {
-            const { token } = storeAuth.getState()
+            const { token, rol } = storeAuth.getState()
             if (!token) {
                 console.error("No se encontró un token de autenticación válido.")
                 return null
             }
             const baseUrl = import.meta.env.VITE_BACKEND_URL
-            const response = await axios.get(`${baseUrl}/perfil`, {
+
+            const perfilUrl = {
+                admin: `${baseUrl}/admin/perfil`,
+                docente: `${baseUrl}/docente/perfil`,
+                user: `${baseUrl}/perfil`
+            }
+
+            const url = perfilUrl[rol] || `${baseUrl}/perfil`
+
+            const response = await axios.get(url, {
                 headers: { Authorization: `Bearer ${token}` }
             })
-            const datosActualizados = response.data.administradorBDD ||
-                                      response.data.estudiantesBDD ||
-                                      response.data.docenteBDD ||
-                                      response.data
 
+            const datosActualizados = response.data.data ||
+                                    response.data.administradorBDD ||
+                                    response.data.estudiantesBDD ||
+                                    response.data.docenteBDD ||
+                                    response.data
             set({ user: datosActualizados })
             return response.data
+
         } catch (error) {
-            console.log("Error en la petición:", error.response.data);
+            console.log("Error en la petición:", error.response?.data)
             return null
         }
     },
@@ -43,26 +54,34 @@ const storeProfile = create((set, get) => ({
             }
 
             const baseUrl = import.meta.env.VITE_BACKEND_URL;
-            const url = `${baseUrl}/actualizarperfil/${id}`;
-            
+
+            // ✅ Cada rol tiene su propia ruta de actualización
+            const updatePerfilUrl = {
+                admin: `${baseUrl}/admin/actualizarperfil/${id}`,
+                docente: `${baseUrl}/docente/actualizarperfil/${id}`,
+                user: `${baseUrl}/actualizarperfil/${id}`
+            }
+
+            const url = updatePerfilUrl[rol] || `${baseUrl}/actualizarperfil/${id}`
+
             const response = await axios.put(url, data, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            // Corregido: nombre de variable consistente
-            const datosActualizados = response.data.administradorBDD ||
-                                    response.data.estudiantesBDD ||
-                                    response.data.docenteBDD ||
-                                    response.data;
+            const datosActualizados = response.data.data ||
+                          response.data.administradorBDD ||
+                          response.data.estudiantesBDD ||
+                          response.data.docenteBDD ||
+                          response.data
 
-            set({ user: datosActualizados }); // Ahora sí actualizará el estado correctamente
+            set({ user: datosActualizados });
             return response.data;
 
         } catch (error) {
             console.error("Error al actualizar:", error.response?.data);
             const mensajeError = error.response?.data?.msg || "Error al actualizar perfil";
             toast.error(mensajeError);
-            throw error; // Lanza el error para que el componente FormularioPerfil pueda manejarlo
+            throw error;
         }
     },
 

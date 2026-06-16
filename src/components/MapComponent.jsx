@@ -97,7 +97,6 @@ function RoutingMachine({ waypoints, color }) {
     return null;
 }
 
-// ── Geocoder: busca coordenadas a partir de texto ──────────────────────────
 async function geocodeAddress(query) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=ec`;
     const res = await fetch(url, { headers: { 'Accept-Language': 'es' } });
@@ -240,7 +239,6 @@ const puntosEstrategicos = [
     { id: 'p2', name: "Auditorio Principal", position: [-0.2100, -78.4890], imagenPano: null },
 ];
 
-// ── ETA Banner — ahora en la parte SUPERIOR ────────────────────────────────
 function ETABanner({ routeInfo, onClose, destination, destName }) {
     if (!routeInfo) return null;
     const h = Math.floor(routeInfo.durationMin / 60);
@@ -281,7 +279,6 @@ function ETABanner({ routeInfo, onClose, destination, destName }) {
     );
 }
 
-// ── Buscador de dirección con sugerencias ─────────────────────────────────
 function AddressSearchBox({ onSelect, disabled }) {
     const [query, setQuery]       = useState('');
     const [results, setResults]   = useState([]);
@@ -417,14 +414,28 @@ const AdvancedMapComponent = () => {
     const warningBtn = { ...btnBase, background: isSettingDestination ? '#fef3c7' : '#f3f4f6', color: isSettingDestination ? '#92400e' : '#374151', border: isSettingDestination ? '2px solid #f59e0b' : '2px solid transparent' };
     const successBtn = { ...btnBase, background: '#dcfce7', color: '#16a34a' };
 
-    return (
-        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 15, height: isMobile ? 'auto' : 620, fontFamily: 'system-ui,sans-serif' }}>
+    const CONTAINER_H = isMobile ? 'auto' : 620;
 
-            {/* ── Sidebar ── */}
-            <div style={{ width: sidebarW, order: isMobile ? 2 : 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+    return (
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 15, height: CONTAINER_H, fontFamily: 'system-ui,sans-serif' }}>
+
+            {/* ── Sidebar con scroll ── */}
+            <div style={{
+                width: sidebarW,
+                order: isMobile ? 2 : 1,
+                height: isMobile ? 'auto' : CONTAINER_H,
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 10,
+                paddingRight: 2,
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#cbd5e1 transparent',
+            }}>
 
                 {/* Mi ubicación */}
-                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden' }}>
+                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden', flexShrink: 0 }}>
                     <div style={{ padding: '12px 15px', background: '#f8faff', borderBottom: '1px solid #e5e7eb' }}>
                         <span style={{ fontWeight: 700, fontSize: 13, color: '#1e40af' }}>📍 Mi Ubicación en Tiempo Real</span>
                     </div>
@@ -448,20 +459,18 @@ const AdvancedMapComponent = () => {
                     </div>
                 </div>
 
-                {/* Destino — buscar + mapa */}
-                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden' }}>
+                {/* Destino */}
+                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden', flexShrink: 0 }}>
                     <div style={{ padding: '12px 15px', background: '#fff8f8', borderBottom: '1px solid #e5e7eb' }}>
                         <span style={{ fontWeight: 700, fontSize: 13, color: '#b91c1c' }}>🏁 Destino</span>
                     </div>
                     <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {/* ── Buscador de dirección ── */}
                         <AddressSearchBox onSelect={handleAddressSelect} disabled={!userLocation} />
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#9ca3af', fontSize: 11 }}>
                             <div style={{ flex: 1, height: 1, background: '#e5e7eb' }} />
                             o
                             <div style={{ flex: 1, height: 1, background: '#e5e7eb' }} />
                         </div>
-                        {/* ── Selección en el mapa ── */}
                         <button style={warningBtn} onClick={() => setIsSettingDestination(s => !s)} disabled={!userLocation} title={!userLocation ? 'Activa tu ubicación primero' : ''}>
                             <span>{isSettingDestination ? '✋' : '🗺️'}</span>
                             {isSettingDestination ? 'Toca el mapa para fijar destino…' : 'Seleccionar destino en el mapa'}
@@ -484,13 +493,13 @@ const AdvancedMapComponent = () => {
                 </div>
 
                 {/* Rutas */}
-                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden' }}>
+                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden', flexShrink: 0 }}>
                     <div onClick={() => setIsRutaMenuOpen(s => !s)} style={{ padding: '12px 15px', cursor: 'pointer', background: '#f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontWeight: 700, fontSize: 13 }}>🚌 Seleccionar Ruta</span>
                         <span style={{ fontSize: 10 }}>{isRutaMenuOpen ? '▲' : '▼'}</span>
                     </div>
                     {isRutaMenuOpen && (
-                        <div style={{ padding: 10, maxHeight: 200, overflowY: 'auto' }}>
+                        <div style={{ padding: 10 }}>
                             {Object.keys(rutasData).map(key => (
                                 <div key={key} onClick={() => handleSelectRoute(key)} style={{
                                     padding: '9px 12px', cursor: 'pointer', borderRadius: 7, marginBottom: 4,
@@ -507,7 +516,7 @@ const AdvancedMapComponent = () => {
                 </div>
 
                 {/* Puntos estratégicos */}
-                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden' }}>
+                <div style={{ background: '#fff', borderRadius: 10, border: '1px solid #ddd', overflow: 'hidden', flexShrink: 0 }}>
                     <div onClick={() => setIsPuntosMenuOpen(s => !s)} style={{ padding: '12px 15px', cursor: 'pointer', background: '#f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontWeight: 700, fontSize: 13 }}>🏛️ Puntos Estratégicos</span>
                         <span style={{ fontSize: 10 }}>{isPuntosMenuOpen ? '▲' : '▼'}</span>
@@ -523,18 +532,21 @@ const AdvancedMapComponent = () => {
                     )}
                 </div>
 
-                <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+                <style>{`
+                    @keyframes spin { to { transform: rotate(360deg) } }
+                    .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+                    .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+                    .sidebar-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+                `}</style>
             </div>
 
             {/* ── Mapa ── */}
             <div style={{ flex: 1, position: 'relative', height: isMobile ? 500 : '100%', borderRadius: 12, overflow: 'hidden', border: '1px solid #e5e7eb' }}>
 
-                {/* Banner ETA — PARTE SUPERIOR */}
                 {routeInfo && (
                     <ETABanner routeInfo={routeInfo} destination={destination} destName={destName} onClose={clearDestination} />
                 )}
 
-                {/* Indicador de modo crosshair */}
                 {isSettingDestination && !routeInfo && (
                     <div style={{
                         position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)',
@@ -583,12 +595,10 @@ const AdvancedMapComponent = () => {
                         </Marker>
                     )}
 
-                    {/* Ruta en tiempo real: origen → destino */}
                     {userLocation && destination && (
                         <UserToDestinationRoute origin={userLocation} destination={destination} onRouteFound={handleRouteFound} />
                     )}
 
-                    {/* Ruta de bus seleccionada (solo si no hay destino activo) */}
                     {selectedRoute && !destination && (
                         <>
                             {rutasData[selectedRoute].stops.map(stop => (

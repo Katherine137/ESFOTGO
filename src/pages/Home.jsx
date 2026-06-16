@@ -12,13 +12,14 @@ export const Home = () => {
         const getEvents = async () => {
             try {
                 const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/eventos`);
-                setEvents(res.data);
+                setEvents(Array.isArray(res.data) ? res.data : res.data.data || res.data.eventos || []);
             } catch (error) {
                 console.error("Error al obtener eventos: ", error);
             }
         };
         getEvents();
     }, []);
+
     const scrollToMap = () => {
         const mapSection = document.getElementById('map-section');
         if (mapSection) {
@@ -48,7 +49,8 @@ export const Home = () => {
                 </ul>
             </header>
 
-            <body className="pt-20">
+            {/* ✅ Cambiado <body> por <div> */}
+            <div className="pt-20">
                 <div className="relative w-full max-w-5xl h-[250px] sm:h-[300px] md:h-[380px] lg:h-[480px] rounded-2xl overflow-hidden mx-auto mt-5">
                     <img src="https://esfot.epn.edu.ec/images/paginas/entradaesfot.jpg" alt="Campus Esfot" className="w-full h-full object-cover"/>
                     
@@ -143,27 +145,29 @@ export const Home = () => {
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7-H9Cj8K_FHrmlPd1p99NGxIGnvOg09zRnw&s" alt="esfot_dragon" className="w-[200px] h-[200px]"/>
                     </div>
                 </section>
-                {/*Card de eventos */}
+
+                {/* Card de eventos */}
                 <section>
-                    <div className="container mx-auto relative mt-8">
+                    <div className="container mx-auto relative mt-8 px-4">
                         <div className='text-red-800 border-2' />
                         <br />
-                        <h1 className="text-blue-950 text-3xl relative w-50 text-center mx-auto font-semibold">EVENTOS</h1>
+                        <h1 className="text-blue-950 text-3xl text-center mx-auto font-semibold">EVENTOS</h1>
                         <br />
-                        <div className="flex justigy-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap">
-                            {event.map((event) => (
-                                <div key={event.id} className="w-full md:w-1/2">
-                                    <CardEvent event={event} />
-                                </div>
-                            ))}
+                        <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100">
+                            {Array.isArray(event) && event.length > 0 ? (
+                                event.map((ev) => (
+                                    <CardEvent key={ev._id} evento={ev} />
+                                ))
+                            ) : (
+                                <p className="text-gray-500 text-center w-full py-8">No hay eventos disponibles</p>
+                            )}
                         </div>
                     </div>
                 </section>
 
-                <footer className="bg-gray-900 text-white mt-20 " id="contact-section">
+                <footer className="bg-gray-900 text-white mt-20" id="contact-section">
                     <div className="max-w-7xl mx-auto px-4 py-12">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 mb-8">
-
 
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">
@@ -217,7 +221,7 @@ export const Home = () => {
                         </div>
                     </div>
                 </footer>
-            </body>
+            </div>
         </>
     )
 }

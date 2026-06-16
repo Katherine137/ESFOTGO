@@ -47,7 +47,6 @@ const Profile = () => {
                 </button>
             </aside>
 
-            {/* SE QUITO EL FONDO BLANCO AQUÍ (bg-white, shadow-sm, p-6) */}
             <main className="flex-1 min-h-[400px]">
                 <div className="w-full max-w-2xl mx-auto transition-all duration-300">
                     
