@@ -49,48 +49,50 @@ const ListEvents = () => {
     if (loading) return <p>Cargando...</p>
 
     return (
-        <table className="w-full mt-5 table-auto shadow-lg bg-white">
-            
-            <thead className="bg-gray-800 text-slate-400">
-                <tr>
-                    {["N°", "Nombre", "Organizador", "Ubicación", "Fecha", "Hora", "Información", "Imagen", "Acciónes"].map((header) => (
-                        <th key={header} className="p-2">{header}</th>
-                    ))}
-                </tr>
-            </thead>
-            
-            <tbody>
-                {
-                    eventos.map((evento, index) => (
-                        <tr className="hover:bg-gray-300 text-center" key={evento._id || index}>
-                            <td>{index + 1}</td>
-                            <td>{evento.nombre}</td>
-                            <td>{evento.organizador}</td>
-                            <td>{evento.ubicacion}</td>
-                            <td>{evento.fecha}</td>
-                            <td>{evento.hora}</td>
-                            <td>{evento.informacion}</td>
-                            <td>{evento.imagen}</td>
-                            <td className="p-2 flex justify-center gap-3">
-                                <button 
-                                    onClick={() => navigate(`/dashboard/actualizarevento/${evento._id}`)}
-                                    className="text-blue-600 hover:text-blue-800 text-2xl"
-                                >
-                                    <MdPublishedWithChanges />
-                                </button>
-                                <button 
-                                    onClick={() => handleEliminar(evento._id)}
-                                    className="text-red-600 hover:text-red-800 text-2xl"
-                                >
-                                    <MdDeleteForever />
-                                </button>
-                            </td>
-                        </tr>
-                        
-                    ))
-                }
-            </tbody>
-        </table>
+        <div className="overflow-x-auto shadow-lg mt-5">
+            <table className="w-full min-w-[800px] table-auto shadow-lg bg-white">
+                
+                <thead className="bg-gray-800 text-slate-400">
+                    <tr>
+                        {["N°", "Nombre", "Organizador", "Ubicación", "Fecha", "Hora", "Información", "Imagen", "Acciónes"].map((header) => (
+                            <th key={header} className="p-3 text-sm font-semibold uppercase">{header}</th>
+                        ))}
+                    </tr>
+                </thead>
+                
+                <tbody className="divide-y divide-gray-200">
+                    {
+                        eventos.map((evento, index) => (
+                            <tr className="hover:bg-gray-100 text-center text-sm" key={evento._id || index}>
+                                <td className="p-3">{index + 1}</td>
+                                <td className="p-3">{evento.nombre}</td>
+                                <td className="p-3">{evento.organizador}</td>
+                                <td className="p-3">{evento.ubicacion}</td>
+                                <td className="p-3">{evento.fecha}</td>
+                                <td className="p-3">{evento.hora}</td>
+                                <td className="p-3 max-w-[150px] truncate">{evento.informacion}</td>
+                                <td className="p-3">{evento.imagen ? "Sí" : "No"}</td>
+                                <td className="p-3 flex justify-center gap-3">
+                                    <button 
+                                        onClick={() => navigate(`/dashboard/actualizarevento/${evento._id}`)}
+                                        className="text-blue-600 hover:text-blue-800 text-xl"
+                                    >
+                                        <MdPublishedWithChanges />
+                                    </button>
+                                    <button 
+                                        onClick={() => handleEliminar(evento._id)}
+                                        className="text-red-600 hover:text-red-800 text-xl"
+                                    >
+                                        <MdDeleteForever />
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
     )
 }
 

@@ -138,70 +138,66 @@ const ListTeacher = () => {
                         disabled={uploading || deletingAll ? true : false}
                         className={`flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-green-800 transition-colors ${(uploading || deletingAll) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        <MdUploadFile className="text-xl" />
+                        <MdUploadFile className="text-lg" />
                         {uploading ? "Procesando..." : "Subir Excel"}
                     </button>
 
                     <button
                         onClick={handleEliminarTodo}
                         disabled={uploading || deletingAll || docentes.length === 0 ? true : false}
-                        className={`flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-red-700 transition-colors ${(uploading || deletingAll || docentes.length === 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg font-medium text-sm shadow hover:bg-red-700 transition-colors ${(uploading || deletingAll || docentes.length === 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        <MdDeleteForever className="text-xl" />
+                        <MdDeleteForever className="text-lg" />
                         {deletingAll ? "Eliminando todo..." : "Eliminar Todo"}
                     </button>
                 </div>
             </div>
 
             {docentes.length === 0 ? (
-                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                    <span className="font-medium">No existen registros de docentes</span>
+                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                    No existen registros de docentes
                 </div>
             ) : (
-                <table className="w-full mt-5 table-auto shadow-lg bg-white">
-                    <thead className="bg-gray-800 text-slate-400">
-                        <tr>
-                            {["N°", "Nombre", "Apellido", "Celular", "Email", "Oficina", "Horarios", "Información", "Acciones"].map((header) => (
-                                <th key={header} className="p-2">{header}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {docentes.map((docente, index) => (
-                            <tr className="hover:bg-gray-300 text-center border-b border-gray-200 text-sm" key={docente._id}>
-                                <td className="p-2">{index + 1}</td>
-                                <td className="p-2">{docente.nombre}</td>
-                                <td className="p-2">{docente.apellido}</td>
-                                <td className="p-2">{docente.celular || 'N/A'}</td>
-                                <td className="p-2">{docente.email}</td>
-                                <td className="p-2">{docente.Oficina?.numero || 'N/A'}</td>
-                                <td className="p-2 text-left px-4">
-                                    {docente.horariosDisponibles?.length > 0 ? (
-                                        docente.horariosDisponibles
-                                            .filter(h => h.disponible)
-                                            .map((horario, idx) => (
-                                                <div key={idx} className="text-xs">
-                                                    {horario.dia}: {horario.horaInicio} - {horario.horaFin}
-                                                </div>
-                                            ))
-                                    ) : (
-                                        <span className="text-xs text-gray-500">No disponible</span>
-                                    )}
-                                </td>
-                                <td className="text-xs p-2">{docente.informacion || 'N/A'}</td>
-                                <td className="p-2 flex justify-center gap-3">
-                                    <button 
-                                        onClick={() => handleEliminarDocente(docente._id, docente.nombre, docente.apellido)}
-                                        className="text-red-600 hover:text-red-800 text-2xl"
-                                        disabled={deletingAll ? true : false}
-                                    >
-                                        <MdDeleteForever />
-                                    </button>
-                                </td>
+                <div className="overflow-x-auto shadow-lg bg-white rounded-lg">
+                    <table className="w-full min-w-[900px] table-auto">
+                        <thead className="bg-gray-800 text-slate-400">
+                            <tr>
+                                {["N°", "Nombre", "Apellido", "Celular", "Email", "Oficina", "Horarios", "Información", "Acciones"].map((header) => (
+                                    <th key={header} className="p-3 text-xs uppercase">{header}</th>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {docentes.map((docente, index) => (
+                                <tr className="hover:bg-gray-50 text-center text-xs" key={docente._id}>
+                                    <td className="p-3">{index + 1}</td>
+                                    <td className="p-3">{docente.nombre}</td>
+                                    <td className="p-3">{docente.apellido}</td>
+                                    <td className="p-3">{docente.celular || 'N/A'}</td>
+                                    <td className="p-3">{docente.email}</td>
+                                    <td className="p-3">{docente.Oficina?.numero || 'N/A'}</td>
+                                    <td className="p-3 text-left">
+                                        {docente.horariosDisponibles?.filter(h => h.disponible).map((h, idx) => (
+                                            <div key={idx} className="whitespace-nowrap">
+                                                {h.dia}: {h.horaInicio}-{h.horaFin}
+                                            </div>
+                                        ))}
+                                    </td>
+                                    <td className="p-3 max-w-[150px] truncate">{docente.informacion || 'N/A'}</td>
+                                    <td className="p-3 flex justify-center gap-2">
+                                        <button 
+                                            onClick={() => handleEliminarDocente(docente._id, docente.nombre, docente.apellido)}
+                                            className="text-red-600 hover:text-red-800 text-xl"
+                                            disabled={deletingAll}
+                                        >
+                                            <MdDeleteForever />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     )

@@ -158,26 +158,26 @@ const ListStudent = () => {
                     <span className="font-medium">No existen registros de estudiantes</span>
                 </div>
             ) : (
-                <table className="w-full mt-5 table-auto shadow-lg bg-white">
+                <table className="overflow-x-auto shadow-lg bg-white rounded-lg">
                     <thead className="bg-gray-800 text-slate-400">
                         <tr>
                             {["N°", "Nombre", "Apellido", "Celular", "Email", "Acciones"].map((header) => (
-                                <th key={header} className="p-2">{header}</th>
+                                <th key={header} className="p-3 text-xs uppercase text-center">{header}</th>
                             ))}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-gray-200">
                         {estudiantes.map((estudiante, index) => (
-                            <tr className="hover:bg-gray-300 text-center border-b border-gray-200" key={estudiante._id}>
-                                <td className="p-2">{index + 1}</td>
-                                <td className="p-2">{estudiante.nombre}</td>
-                                <td className="p-2">{estudiante.apellido}</td>
-                                <td className="p-2">{estudiante.celular || 'N/A'}</td>
-                                <td className="p-2">{estudiante.email}</td>
-                                <td className="p-2 flex justify-center gap-3">
+                            <tr className="hover:bg-gray-50 text-center text-sm" key={estudiante._id}>
+                                <td className="p-3">{index + 1}</td>
+                                <td className="p-3">{estudiante.nombre}</td>
+                                <td className="p-3">{estudiante.apellido}</td>
+                                <td className="p-3">{estudiante.celular || 'N/A'}</td>
+                                <td className="p-3">{estudiante.email}</td>
+                                <td className="p-3 flex justify-center gap-2">
                                     <button 
                                         onClick={() => handleEliminarEstudiante(estudiante._id, estudiante.nombre, estudiante.apellido)}
-                                        className="text-red-600 hover:text-red-800 text-2xl"
+                                        className="text-red-600 hover:text-red-800 text-xl"
                                         disabled={deletingAll}
                                     >
                                         <MdDeleteForever />
