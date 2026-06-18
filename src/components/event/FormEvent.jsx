@@ -15,8 +15,8 @@ const FormEvent = ({ onEventoCreado }) => {
 
         const reader = new FileReader();
         reader.onloadend = () => {
-            setImagenPreview(reader.result);       // para mostrar preview
-            setImagenBase64(reader.result);        // base64 completo con prefijo
+            setImagenPreview(reader.result);
+            setImagenBase64(reader.result);
         };
         reader.readAsDataURL(file);
     };
@@ -27,7 +27,7 @@ const FormEvent = ({ onEventoCreado }) => {
 
         try {
             const baseURL = import.meta.env.VITE_BACKEND_URL;
-            const url = `${baseURL}/admin/evento`; // ← ruta correcta
+            const url = `${baseURL}/admin/evento`;
 
             const payload = {
                 ...dataForm,
@@ -74,7 +74,6 @@ const FormEvent = ({ onEventoCreado }) => {
 
             <form onSubmit={handleSubmit(registerEventForm)} className="space-y-4">
 
-                {/* Campo: imagen */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Imagen del Evento</label>
                     <div className="flex flex-col items-center gap-3">
@@ -95,7 +94,6 @@ const FormEvent = ({ onEventoCreado }) => {
                     </div>
                 </div>
 
-                {/* Campo: nombre */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre del Evento</label>
                     <input
@@ -111,7 +109,6 @@ const FormEvent = ({ onEventoCreado }) => {
                     {errors.nombre && <span className="text-red-600 text-xs">{errors.nombre.message}</span>}
                 </div>
 
-                {/* Campo: organizador */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Organizador</label>
                     <input
@@ -127,7 +124,6 @@ const FormEvent = ({ onEventoCreado }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Campo: fecha */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Fecha</label>
                         <input
@@ -138,7 +134,6 @@ const FormEvent = ({ onEventoCreado }) => {
                             disabled={loading}
                         />
                     </div>
-                    {/* Campo: hora */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Hora</label>
                         <input
@@ -151,7 +146,6 @@ const FormEvent = ({ onEventoCreado }) => {
                     </div>
                 </div>
 
-                {/* Campo: ubicacion */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
                     <input
@@ -167,7 +161,6 @@ const FormEvent = ({ onEventoCreado }) => {
                     {errors.ubicacion && <span className="text-red-600 text-xs">{errors.ubicacion.message}</span>}
                 </div>
 
-                {/* Campo: informacion */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Información Adicional</label>
                     <textarea

@@ -20,7 +20,7 @@ const ListStudent = () => {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            setEstudiantes(response.data)
+            setEstudiantes(Array.isArray(response.data) ? response.data : response.data.data || response.data.estudiantes || [])
         } catch (error) {
             console.error(error)
         } finally {

@@ -66,7 +66,6 @@ const Event = () => {
                 </div>
             ) : (
                 <>
-                    {/* Mostrar eventos existentes */}
                     <div className="container mx-auto px-4 mb-12">
                         <h1 className='font-black text-4xl text-blue-950 mb-8'>Eventos Registrados</h1>
                         

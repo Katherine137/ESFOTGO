@@ -20,7 +20,7 @@ const ListTeacher = () => {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            setDocentes(response.data)
+            setDocentes(Array.isArray(response.data) ? response.data : response.data.data || response.data.docentes || []);
         } catch (error) {
             console.error(error)
         } finally {
@@ -66,7 +66,7 @@ const ListTeacher = () => {
         if (!confirmar) return
 
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/eliminardocente/${id}` 
+            const url = `${import.meta.env.VITE_BACKEND_URL}/admin/eliminardocente/${id}` 
             await axios.delete(url, { headers: { Authorization: `Bearer ${token}` } })
             setDocentes(docentes.filter(docente => docente._id !== id))
         } catch (error) {
