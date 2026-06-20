@@ -4,6 +4,21 @@ import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import storeAuth from "../../context/storeAuth";
 
+const mostrarCreador = (creador) => {
+    if (!creador) return 'N/A'
+    if (typeof creador === 'string') return creador
+    return creador.nombre 
+        ? `${creador.nombre} ${creador.apellido || ''}`.trim()
+        : creador.email || 'N/A'
+}
+
+const formatearFecha = (fecha) => {
+    if (!fecha) return 'Sin fecha'
+    return new Date(fecha).toLocaleDateString('es-ES', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    })
+}
+
 const ListTutoring = () => {
     const [tutorias, setTutorias] = useState([])
     const [loading, setLoading] = useState(true)
@@ -19,8 +34,9 @@ const ListTutoring = () => {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            const data = response.data?.data || response.data
-            setTutorias(response.data.data || [])
+            console.log('Respuesta completa:', response.data)
+            console.log('creado_por de la primera tutoria:', response.data?.data?.[0]?.creado_por)
+            setTutorias(response.data?.data || [])
         } catch (error) {
             console.error('Error al cargar tutorias:', error)
         } finally {
@@ -69,15 +85,21 @@ const ListTutoring = () => {
                             <td>{tutoria.docente}</td>
                             <td>{tutoria.oficina}</td>
                             <td>{tutoria.informacion}</td>
-                            <td>{tutoria.horarios}</td>
-                            <td>{tutoria.fecha}</td>
-                            <td>{tutoria.duracion}</td>
-                            <td>{tutoria.cupo_maximo}</td>
-                            <td>{tutoria.creado_por}</td>
+                            <td>
+                                {tutoria.horarios?.length > 0
+                                    ? tutoria.horarios.map((h, i) => (
+                                        <div key={i}>{h.dia}: {h.horaInicio} – {h.horaFin}</div>
+                                    ))
+                                    : 'Sin horarios'}
+                            </td>
+                            <td>{formatearFecha(tutoria.fecha)}</td>
+                            <td>{tutoria.duracion ? `${tutoria.duracion} min` : 'N/A'}</td>
+                            <td>{tutoria.cupo_maximo ?? 'Sin límite'}</td>
+                            <td>{mostrarCreador(tutoria.creado_por)}</td>
                             <td>{tutoria.estado}</td>
                             <td className="p-2 flex justify-center gap-3">
                                 <button 
-                                    onClick={() => navigate(`/admin/tutoria/${tutoria._id}`)}
+                                    onClick={() => navigate(`/dashboard/actualizartutoria/${tutoria._id}`)}
                                     className="text-blue-600 hover:text-blue-800 text-2xl"
                                 >
                                     <MdPublishedWithChanges />

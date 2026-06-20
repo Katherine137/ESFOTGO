@@ -49,7 +49,6 @@ export const Home = () => {
                 </ul>
             </header>
 
-            {/* ✅ Cambiado <body> por <div> */}
             <div className="pt-20">
                 <div className="relative w-full max-w-5xl h-[250px] sm:h-[300px] md:h-[380px] lg:h-[480px] rounded-2xl overflow-hidden mx-auto mt-5">
                     <img src="https://esfot.epn.edu.ec/images/paginas/entradaesfot.jpg" alt="Campus Esfot" className="w-full h-full object-cover"/>

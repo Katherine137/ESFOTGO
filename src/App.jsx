@@ -25,9 +25,11 @@ import ListClassroom from './components/List/ListClassroom'
 import ListEvents from './components/List/ListEvents'
 import ListTeacher from './components/List/ListTeacher'
 import ListStudent from './components/List/ListStudents'
-import MapCreate from './components/Mapcreate'
-import CardUpdate from './components/event/CardUpdate'
+import MapCreate from './components/map/Mapcreate'
+import CardUpdateE from './components/event/CardUpdate'
+import CardUpdateT from './components/Tutoring/CardUpdate'
 import ListTutoring from './components/list/ListTutoring'
+import ListRouts from './components/list/ListRutas'
 
 function App() {
   const { profile } = storeProfile()
@@ -62,13 +64,15 @@ function App() {
           <Route path='classroom' element={<Classroom/>}/>
           <Route path='teacher' element={<Teacher/>}/>
           <Route path='tutoring' element={<Tutoring/>}/>
-          <Route path='actualizarevento/:id' element={<CardUpdate/>}/>
+          <Route path='actualizarevento/:id' element={<CardUpdateE/>}/>
+          <Route path='actualizartutoria/:id' element={<CardUpdateT/>}/>
           <Route path='list' element={<List/>}/>
           <Route path='list/aulas' element={<ListClassroom/>}/>
           <Route path='list/eventos' element={<ListEvents/>}/>
           <Route path='list/docentes' element={<ListTeacher/>}/>
           <Route path='list/estudiantes' element={<ListStudent/>}/>
           <Route path='list/tutorias' element={<ListTutoring/>}/>
+          <Route path='list/rutas' element={<ListRouts/>}/>
           <Route path='mapcreate' element={<MapCreate/>}/>
         </Route>
       </Routes>

@@ -63,7 +63,7 @@ const Dashboard = () => {
                     </span>
                     <img 
                         className="h-12 w-12 object-cover rounded-full border-black border-2" 
-                        src={user?.imagen || user?.photo || "/Buho_1.png"} 
+                        src={user?.imagen || user?.photo} 
                         alt="usuario" 
                     />
                 </div>
@@ -94,7 +94,7 @@ const Dashboard = () => {
                     <div className="px-5 py-4 min-w-64">
                         <img
                             className="h-auto w-full max-w-[200px] mx-auto rounded-full border-black border-2 mb-4"
-                            src={user?.imagen || user?.photo || "/Buho_1.png"}
+                            src={user?.imagen || user?.photo}
                             alt="usuario"
                         />
         

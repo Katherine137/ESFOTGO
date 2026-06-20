@@ -4,17 +4,13 @@ export const CardProfile = () => {
     const { user } = storeProfile()
 
     return (
-        <div >
+        <div>
             <div className="relative mb-6">
                 <img 
-                    src="/dragon_logo_1.png" 
-                    alt="img-client" 
-                    className="m-auto rounded-full w-32 h-32 object-cover" 
+                    src={user?.imagen || user?.photo} 
+                    alt={user?.nombre ? `Foto de perfil de ${user.nombre}` : "Foto de perfil"} 
+                    className="m-auto rounded-full w-32 h-32 object-cover border-4 border-slate-100" 
                 />
-                <label className="absolute bottom-1 right-1 bg-blue-500 text-white rounded-full p-2.5 cursor-pointer hover:bg-emerald-500 transition-colors">
-                    📷
-                    <input type="file" accept="image/*" className="hidden" />
-                </label>
             </div>
 
             <div className="w-full space-y-4 text-slate-700">

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import MapComponent from '../components/MapComponent';
+import MapComponent from '../components/map/MapComponent';
 
 export const Map = () => {
 return (

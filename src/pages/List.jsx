@@ -43,7 +43,7 @@ const List = () => {
                         className="bg-white border-2 border-blue-500 p-6 rounded-lg shadow-lg hover:bg-blue-50 hover:scale-105 transition-all"
                     >
                         <div className="text-center">
-                            <div className="text-5xl mb-4">🏫</div>
+                            <div className="text-5xl mb-4">🦉</div>
                             <h2 className="text-xl font-bold text-blue-900">Tutorias</h2>
                             <p className="text-gray-600 mt-2">Ver listado de tutorias</p>
                         </div>
@@ -82,6 +82,20 @@ const List = () => {
                             <h2 className="text-xl font-bold text-purple-900">Estudiantes</h2>
                             
                             <p className="text-gray-600 mt-2">Ver listado de estudiantes</p>
+                        </div>
+                    </Link>
+                )}
+                {(rol === 'admin') && (
+                    <Link 
+                        to="/dashboard/list/rutas"
+                        className="bg-white border-2 border-blue-500 p-6 rounded-lg shadow-lg hover:bg-blue-50 hover:scale-105 transition-all block"
+                    >
+                        <div className="text-center">
+                            <div className="text-5xl mb-4">🗺️</div>
+                            
+                            <h2 className="text-xl font-bold text-blue-900">Rutas</h2>
+                            
+                            <p className="text-gray-600 mt-2">Ver listado de rutas</p>
                         </div>
                     </Link>
                 )}

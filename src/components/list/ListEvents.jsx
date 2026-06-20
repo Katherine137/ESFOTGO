@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import storeAuth from "../../context/storeAuth";
 
+const formatearFecha = (fecha) => {
+    if (!fecha) return 'Sin fecha'
+    return new Date(fecha).toLocaleDateString('es-ES', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    })
+}
+
 const ListEvents = () => {
     const [eventos, setEventos] = useState([])
     const [loading, setLoading] = useState(true)
@@ -68,7 +75,7 @@ const ListEvents = () => {
                                 <td className="p-3">{evento.nombre}</td>
                                 <td className="p-3">{evento.organizador}</td>
                                 <td className="p-3">{evento.ubicacion}</td>
-                                <td className="p-3">{evento.fecha}</td>
+                                <td className="p-3">{formatearFecha(evento.fecha)}</td>
                                 <td className="p-3">{evento.hora}</td>
                                 <td className="p-3 max-w-[150px] truncate">{evento.informacion}</td>
                                 <td className="p-3">{evento.imagen ? "Sí" : "No"}</td>
