@@ -33,19 +33,18 @@ const Login = () => {
   };
 
   const loginUser = async (dataForm) => {
-    const url = getLoginUrl(selectedRol);
-    const response = await fetchDataBackend(url, dataForm, "POST");
+      const url = getLoginUrl(selectedRol);
+      const response = await fetchDataBackend(url, dataForm, "POST");
 
-    // ✅ El token está dentro de response.data
-    const token = response?.token || response?.data?.token;
-    const userId = response?.id || response?._id || response?.data?.id || response?.data?._id;
+      const token = response?.token || response?.data?.token;
+      const userId = response?.id || response?._id || response?.data?.id || response?.data?._id;
 
-    if (response && token) {
-      setAuth(token, selectedRol, userId);
-      navigate("/dashboard");
-      profile();
-    }
-};
+      if (response && token) {
+        setAuth(token, selectedRol, userId);
+        navigate("/dashboard");
+        profile();
+      }
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-b from-blue-950 to-rose-950">

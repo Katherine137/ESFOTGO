@@ -105,7 +105,7 @@ const Dashboard = () => {
                         </p>
 
                         <p className='text-slate-400 text-center my-4 text-sm'>
-                            Rol - {rol || 'N/A'}
+                            Rol - {typeof rol === 'string' ? rol : rol?.nombre || rol?.name || 'N/A'}
                         </p>
 
                         <div className="flex flex-col gap-3 mt-6">
@@ -185,7 +185,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
+                <div className="flex-1 overflow-hidden bg-gray-50">
                     <Outlet />
                 </div>
             </div>

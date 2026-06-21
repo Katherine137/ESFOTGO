@@ -198,11 +198,11 @@ function MapClickHandler({ mode, onAddStop, onSetDestination, onAddPoiCoord }) {
     return null;
 }
 
-function FlyTo({ center, zoom = 15 }) {
+function FlyTo({ center, zoom = 15, ts }) {
     const map = useMap();
     useEffect(() => {
         if (center) map.flyTo(center, zoom, { duration: 1 });
-    }, [center, zoom, map]);
+    }, [center, zoom, map, ts]);
     return null;
 }
 
@@ -967,7 +967,7 @@ const MapCreate = () => {
     }, [BASE_URL, token]);
 
     const [activeTab,   setActiveTab]   = useState('pois');
-    const [mapCenter,   setMapCenter]   = useState([-0.21073, -78.48884]);
+    const [flyTarget, setFlyTarget] = useState({ center: [-0.21073, -78.48884], ts: 0 });
     const [zoomLevel,   setZoomLevel]   = useState(15);
     const [mapMode,     setMapMode]     = useState('view');
 
@@ -1253,7 +1253,7 @@ const MapCreate = () => {
         setSelRoute(r);
         const stops = r._stops || [];
         setSelRouteStops(stops);
-        if (stops.length > 0) setMapCenter([stops[0].lat, stops[0].lng]);
+        if (stops.length > 0) setFlyTarget({ center: [stops[0].lat, stops[0].lng], ts: Date.now() });
         else showMsg('error', 'Esta ruta no tiene paradas registradas');
     }, [selRoute]);
 
@@ -1341,14 +1341,14 @@ const MapCreate = () => {
         setPreviewRouteIdx(selectedIdx !== undefined ? selectedIdx : null);
         if (selectedIdx !== null && rutas[selectedIdx]?.stops.length > 0) {
             const firstStop = rutas[selectedIdx].stops[0];
-            setMapCenter([firstStop.lat, firstStop.lng]);
+            setFlyTarget({ center: [firstStop.lat, firstStop.lng], ts: Date.now() });
         }
     }, []);
 
     const activePreviewRoute = previewRouteIdx !== null ? previewRoutes[previewRouteIdx] : null;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', minHeight: 0, fontFamily: 'system-ui,sans-serif', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', fontFamily: 'system-ui,sans-serif' }}>
 
             {/* Visor 360 modal */}
             {viewer360Url && (
@@ -1398,15 +1398,11 @@ const MapCreate = () => {
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
                 {/* Panel lateral */}
-                <div style={{
-                    width: 280, overflowY: 'auto', padding: 12,
-                    background: '#fff', borderRight: '1px solid #e5e7eb',
-                    display: 'flex', flexDirection: 'column', gap: 12,
-                }}>
+                <div style={{ width: 280, overflowY: 'auto', padding: 12, background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', gap: 12, height: '100%' }}>
 
                     <SearchBar
                         onSelectLocation={(coords, name) => {
-                            setMapCenter(coords);
+                            setFlyTarget({ center: coords, ts: Date.now() });
                             setDestination(coords);
                             setDestName(name);
                         }}
@@ -1500,7 +1496,7 @@ const MapCreate = () => {
                                                     display: 'flex', justifyContent: 'space-between',
                                                     alignItems: 'center', cursor: 'pointer',
                                                 }}
-                                                onClick={() => setMapCenter([poi.latitud, poi.longitud])}
+                                                onClick={() => setFlyTarget({ center: [poi.latitud, poi.longitud], ts: Date.now() })}
                                             >
                                                 <div style={{ flex: 1, minWidth: 0 }}>
                                                     <div style={{ fontSize: 13, fontWeight: 600, color: '#111827',
@@ -1809,9 +1805,9 @@ const MapCreate = () => {
                     )}
 
                     <MapContainer
-                        center={mapCenter}
+                        center={flyTarget.center}
                         zoom={zoomLevel}
-                        style={{ height: '100%', width: '100%' }}
+                        style={{ height: '100%', width: '100%', zIndex: 0 }}
                         whenReady={({ target: map }) => {
                             map.on('zoomend', () => setZoomLevel(map.getZoom()));
                         }}
@@ -1819,7 +1815,7 @@ const MapCreate = () => {
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             attribution='&copy; OpenStreetMap' />
 
-                        <FlyTo center={mapCenter} zoom={15} />
+                        <FlyTo center={flyTarget.center} zoom={15} ts={flyTarget.ts} />
 
                         <MapClickHandler
                             mode={mapMode}
