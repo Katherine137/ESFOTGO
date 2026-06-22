@@ -63,7 +63,7 @@ const Dashboard = () => {
                     </span>
                     <img 
                         className="h-12 w-12 object-cover rounded-full border-black border-2" 
-                        src={user?.imagen || user?.photo} 
+                        src={user?.imagen || user?.photo || "/Buho_1.png"} 
                         alt="usuario" 
                     />
                 </div>
@@ -94,7 +94,7 @@ const Dashboard = () => {
                     <div className="px-5 py-4 min-w-64">
                         <img
                             className="h-auto w-full max-w-[200px] mx-auto rounded-full border-black border-2 mb-4"
-                            src={user?.imagen || user?.photo}
+                            src={user?.imagen || user?.photo || "/Buho_1.png"}
                             alt="usuario"
                         />
         
@@ -195,7 +195,7 @@ const Dashboard = () => {
             <div className="bg-gray-900 text-white mt-auto">
                 <div className="max-w-7xl mx-auto px-4 py-8 border-t border-gray-800 pt-6 text-center">
                     <p className="text-gray-500 text-sm">
-                        &copy; 2026 ESFOTgo. Todos los derechos reservados. | Desarrollado con estudiantes para la comunidad ESFOT
+                        &copy; 2026 ESFOTgo. Todos los derechos reservados. | Desarrollado por estudiantes para la comunidad ESFOT
                     </p>
                 </div>
             </div>

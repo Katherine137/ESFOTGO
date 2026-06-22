@@ -1,79 +1,17 @@
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { useState } from 'react';
+import useEventoForm from '../../../hooks/events/useEventoForm'
 
 const FormEvent = ({ onEventoCreado }) => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
-    const [imagenPreview, setImagenPreview] = useState(null);
-    const [imagenBase64, setImagenBase64] = useState(null);
-
-    const handleImagenChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImagenPreview(reader.result);
-            setImagenBase64(reader.result);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const registerEventForm = async (dataForm) => {
-        setLoading(true);
-        setMessage({ type: '', text: '' });
-
-        try {
-            const baseURL = import.meta.env.VITE_BACKEND_URL;
-            const url = `${baseURL}/admin/evento`;
-
-            const payload = {
-                ...dataForm,
-                fecha: dataForm.fecha ? new Date(dataForm.fecha).toISOString().split('T')[0] : dataForm.fecha
-            };
-            if (imagenBase64) {
-                payload.subirBase64Evento = imagenBase64;
-            }
-
-            await axios.post(url, payload, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            setMessage({ type: 'success', text: 'Evento creado exitosamente' });
-            reset();
-            setImagenPreview(null);
-            setImagenBase64(null);
-            if (onEventoCreado) onEventoCreado();
-
-        } catch (error) {
-            console.error('Error en el registro:', error);
-            const errorMsg = error.response?.data?.message ||
-                            error.response?.data?.error ||
-                            'Error al conectar con el servidor';
-            setMessage({ type: 'error', text: errorMsg });
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { register, handleSubmit, errors, loading, message, imagenPreview, handleImagenChange } = useEventoForm(onEventoCreado)
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-900">
             <h2 className="text-2xl font-bold text-blue-950 mb-4 text-center">Crear Nuevo Evento</h2>
-
             {message.text && (
-                <div className={`mb-4 p-3 rounded border ${
-                    message.type === 'success'
-                    ? 'bg-green-100 text-green-700 border-green-400'
-                    : 'bg-red-100 text-red-700 border-red-400'
-                }`}>
-                    {message.text}
+                <div className={`mb-4 p-3 rounded border ${message.type === 'success' ? 'bg-green-100 text-green-700 border-green-400' : 'bg-red-100 text-red-700 border-red-400'}`}>
+                {message.text}
                 </div>
             )}
-
-            <form onSubmit={handleSubmit(registerEventForm)} className="space-y-4">
-
+            <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Imagen del Evento</label>
                     <div className="flex flex-col items-center gap-3">

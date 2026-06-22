@@ -32,11 +32,12 @@ const List = () => {
     
     return(
         <>
-            <div>
+            <br/>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between flex-wrap gap-4 px-4 sm:px-6 lg:px-8">
                 <h1 className='font-black text-4xl text-blue-950'>Listados</h1>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8 px-4 sm:px-6 lg:px-8">
                 {(rol === 'docente') && (
                     <Link 
                         to="/dashboard/list/tutorias"

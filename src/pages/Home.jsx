@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CardEvent } from "../components/event/CardEvent";
+import { CardEvent } from "../components/event/card/CardEvent"
 import Logo from "../assets/Logo.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -215,7 +215,7 @@ export const Home = () => {
 
                         <div className="border-t border-gray-800 pt-6 text-center">
                             <p className="text-gray-500 text-sm">
-                                &copy; 2025 ESFOTgo. Todos los derechos reservados. | Desarrollado con estudiantes para la comunidad ESFOT
+                                &copy; 2025 ESFOTgo. Todos los derechos reservados. | Desarrollado por estudiantes para la comunidad ESFOT
                             </p>
                         </div>
                     </div>
