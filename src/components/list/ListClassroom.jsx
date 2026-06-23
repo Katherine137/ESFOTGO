@@ -17,7 +17,12 @@ const ListClassroom = () => {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            setAulas(response.data)
+            if (response.data && Array.isArray(response.data.data)) {
+                setAulas(response.data.data) 
+            } else {
+                console.error("La estructura interna de la API cambió:", response.data)
+                setAulas([])
+            }
         } catch (error) {
             console.error('Error al cargar aulas:', error)
         } finally {

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import storeAuth from "../context/storeAuth";
 import storeProfile from "../context/storeProfile";
 import Dragon from "../assets/dragon.png";
+import Fondo from "../assets/fondo.png";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +48,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-b from-blue-950 to-rose-950">
+    <div className="min-h-screen flex flex-col md:flex-row bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${Fondo})` }}
+    >
 
       <ToastContainer />
 
@@ -107,7 +110,7 @@ const Login = () => {
                     value: /^[a-z._%+-]+@epn\.edu\.ec$/,
                     message: "Debe ser un correo institucional @epn.edu.ec solo minusculas "
                   }
-                 })}
+                })}
               />
 
               {errors.email && (

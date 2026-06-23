@@ -332,13 +332,13 @@ const Chat = () => {
                         <div className="flex items-center gap-1">
                             {isAdminOrDocente && chatMode === 'private' && view === 'conversations' && (
                                 <button onClick={() => { setChatMode('general'); fetchGeneralMessages() }}
-                                    className="text-xs text-white bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1.5 rounded-full transition-all font-medium">
+                                    className="text-xs text-white bg-blue-800 bg-opacity-20 hover:bg-opacity-30 px-3 py-1.5 rounded-full transition-all font-medium">
                                     General
                                 </button>
                             )}
                             {isAdminOrDocente && chatMode === 'general' && (
                                 <button onClick={() => { setChatMode('private'); setView('conversations') }}
-                                    className="text-xs text-white bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1.5 rounded-full transition-all font-medium">
+                                    className="text-xs text-white bg-blue-800 bg-opacity-20 hover:bg-opacity-30 px-3 py-1.5 rounded-full transition-all font-medium">
                                     Privado
                                 </button>
                             )}
