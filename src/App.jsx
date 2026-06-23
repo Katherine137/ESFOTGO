@@ -18,7 +18,6 @@ import DashboardHome from './pages/DashboardHome'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Classroom from './pages/Classroom'
-import Teacher from './pages/Teacher'
 import Tutoring from './pages/Tutoring'
 import List from './pages/List'
 import ListClassroom from './components/list/ListClassroom'
@@ -63,7 +62,6 @@ function App() {
           <Route path='profile' element={<Profile/>}/>
           <Route path='event' element={<Event/>}/>
           <Route path='classroom' element={<Classroom/>}/>
-          <Route path='teacher' element={<Teacher/>}/>
           <Route path='tutoring' element={<Tutoring/>}/>
           <Route path='actualizarevento/:id' element={<CardUpdateE/>}/>
           <Route path='actualizartutoria/:id' element={<CardUpdateT/>}/>
