@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { useFetch } from "../hooks/useFetch";
 import { useForm } from "react-hook-form";
+import Fondo from "../assets/fondo.png";
 
 export const Forgot = () => {
     const { register, handleSubmit, formState: { errors }} = useForm()
@@ -16,7 +17,9 @@ export const Forgot = () => {
 
             <ToastContainer/>
 
-            <div className="bg-linear-to-b from-blue-950 to-rose-950 w-full sm:w-1/2 flex justify-center items-center bg-white p-4">
+            <div className="min-h-screen flex flex-col md:flex-row bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${Fondo})` }}
+            >
             
                 <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-lg">
                     <h1 className="text-3xl font-semibold text-center text-slate-500">¡Olvidaste la contraseña!</h1>
