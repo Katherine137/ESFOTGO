@@ -47,7 +47,7 @@ const ListClassroom = () => {
             
             <thead className="bg-gray-800 text-slate-400">
                 <tr>
-                    {["N°", "Número", "Ubicación", "Tipo", "Edificio"].map((header) => (
+                    {["N°", "Número", "Ubicación", "Tipo"].map((header) => (
                         <th key={header} className="p-2">{header}</th>
                     ))}
                 </tr>
@@ -69,7 +69,6 @@ const ListClassroom = () => {
                                     {aula.tipo}
                                 </span>
                             </td>
-                            <td>{aula.edificio?.nombre || aula.edificio || 'N/A'}</td>
                         </tr>
                     ))
                 }

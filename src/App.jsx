@@ -30,6 +30,7 @@ import CardUpdateE from './components/event/card/CardUpdate'
 import CardUpdateT from './components/Tutoring/card/CardUpdate'
 import ListTutoring from './components/Tutoring/list/ListTutoring'
 import ListRouts from './components/list/ListRutas'
+import Tutoria from './pages/Tutoria'
 
 function App() {
   const { profile } = storeProfile()
@@ -74,6 +75,7 @@ function App() {
           <Route path='list/tutorias' element={<ListTutoring/>}/>
           <Route path='list/rutas' element={<ListRouts/>}/>
           <Route path='mapcreate' element={<MapCreate/>}/>
+          <Route path='tutoria' element={<Tutoria/>}/>
         </Route>
       </Routes>
 

@@ -55,17 +55,6 @@ const FormClassroom = () => {
             )}
 
             <div className="mb-3">
-                <label className="mb-1 block text-sm font-semibold">Edificio</label>
-                <input 
-                    type="text" 
-                    placeholder="Ingresa el edificio" 
-                    className="block w-full rounded-md border border-blue-500 py-1 px-1.5 text-neutral-950"
-                    {...register("edificio", { required: "El edificio es obligatorio" })}
-                />
-                {errors.edificio && <p className="text-red-800 text-xs mt-1">{errors.edificio.message}</p>}
-            </div>
-
-            <div className="mb-3">
                 <label className="mb-1 block text-sm font-semibold">Ubicación</label>
                 <input 
                     type="text" 

@@ -6,13 +6,6 @@ const CardUpdate = () => {
         <form >
             <h2 className="text-blue-900">Actualizar aula</h2>
             <div className="mb-3">
-                <label className="mb-1 block text-sm font-semibold">Edificio</label>
-                    <input type="text" placeholder="Ingresa el número del edificio" className="block w-full rounded-md border
-                    border-blue-500  py-1 px-1.5 text-neutral-950"
-                    />
-            </div>
-
-            <div className="mb-3">
                 <label className="mb-1 block text-sm font-semibold">Piso</label>
                     <input type="text" placeholder="Ingresa el número de piso" className="block w-full rounded-md border
                     border-blue-500 py-1 px-1.5 text-neutral-950"

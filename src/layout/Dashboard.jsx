@@ -131,6 +131,18 @@ const Dashboard = () => {
                                 Eventos
                             </Link>
 
+                            {(rol === 'user') && (
+                            <Link
+                                to='/dashboard/tutoria'
+                                className={`w-full text-center py-3 rounded-lg border-2 shadow-lg transition-all ${
+                                    urlActual.includes('/tutoria')
+                                        ? 'bg-blue-400 text-blue-950 border-blue-500 font-semibold'
+                                        : 'border-white hover:bg-blue-400 text-gray-600'
+                                }`}
+                            >
+                                Tutoria
+                            </Link>
+                            )}
 
                             {(rol === 'admin') && (
                                 <Link
@@ -144,20 +156,7 @@ const Dashboard = () => {
                                     Mapa
                                 </Link>
                             )}
-{/* 
-                            {(rol === 'admin') && (
-                            <Link
-                                to='/dashboard/teacher'
-                                className={`w-full text-center py-3 rounded-lg border-2 shadow-lg transition-all ${
-                                    urlActual.includes('/teacher')
-                                        ? 'bg-blue-400 text-blue-950 border-blue-500 font-semibold'
-                                        : 'border-white hover:bg-blue-400 text-gray-600'
-                                }`}
-                            >
-                                Docentes
-                            </Link>
-                            )}
-*/}
+
                             {(rol === 'docente') && (
                                 <Link
                                     to='/dashboard/tutoring'

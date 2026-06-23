@@ -8,11 +8,13 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/api"
 const SOCKET_URL = BASE_URL.replace('/api', '')
 
 const Chat = () => {
-    const { token, userId } = storeAuth()
+    const { token, userId, rol } = storeAuth()
     const { user } = storeProfile()
+    const isAdminOrDocente = rol === 'admin' || rol === 'docente'
 
     const [socket, setSocket] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
+    const [chatMode, setChatMode] = useState('private')
     const [view, setView] = useState('conversations')
 
     const [conversations, setConversations] = useState([])
@@ -25,6 +27,12 @@ const Chat = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [loadingUsers, setLoadingUsers] = useState(false)
 
+    const [generalMessages, setGeneralMessages] = useState([])
+    const [generalText, setGeneralText] = useState("")
+    const [onlineUsers, setOnlineUsers] = useState([])
+    const [generalLoading, setGeneralLoading] = useState(false)
+    const [connected, setConnected] = useState(false)
+
     const messagesEndRef = useRef(null)
     const activeConversationRef = useRef(null)
 
@@ -34,7 +42,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (isOpen) scrollToBottom()
-    }, [messages, isOpen])
+    }, [messages, generalMessages, isOpen])
 
     const fetchConversations = useCallback(async () => {
         if (!token) return
@@ -61,18 +69,45 @@ const Chat = () => {
         })
         setSocket(newSocket)
 
-        newSocket.on("mensaje-privado", (payload) => {
+        newSocket.on("connect", () => {
+            setConnected(true)
+            const userData = user || {}
+            newSocket.emit('usuario-conectado', {
+                _id: userId,
+                nombre: userData.nombre || 'Usuario',
+                email: userData.email || '',
+                rol: rol || 'invitado'
+            })
+        })
+
+        newSocket.on("disconnect", () => setConnected(false))
+
+        // Chat privado (BUG FIX: mensaje-privado → mensaje-privado-recibido)
+        newSocket.on("mensaje-privado-recibido", (payload) => {
             if (activeConversationRef.current && payload.conversationId === activeConversationRef.current._id) {
                 setMessages(prev => [...prev, { ...payload, isOwn: payload.senderId === userId }])
             }
             fetchConversations()
         })
 
+        // Chat general
+        newSocket.on("mensaje-recibido", (msg) => {
+            setGeneralMessages(prev => [...prev, msg])
+        })
+
+        newSocket.on("usuarios-online", (lista) => {
+            setOnlineUsers(Array.isArray(lista) ? lista : [])
+        })
+
         return () => {
-            newSocket.off("mensaje-privado")
+            newSocket.off("connect")
+            newSocket.off("disconnect")
+            newSocket.off("mensaje-privado-recibido")
+            newSocket.off("mensaje-recibido")
+            newSocket.off("usuarios-online")
             newSocket.disconnect()
         }
-    }, [token, userId, fetchConversations])
+    }, [token, userId, rol, user, fetchConversations])
 
     useEffect(() => {
         activeConversationRef.current = activeConversation
@@ -96,6 +131,36 @@ const Chat = () => {
         } finally {
             setLoadingMsgs(false)
         }
+    }
+
+    const fetchGeneralMessages = async () => {
+        setGeneralLoading(true)
+        try {
+            const res = await fetch(`${BASE_URL}/chat/messages?room=general`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            if (!res.ok) {
+                setGeneralMessages([])
+                return
+            }
+            const data = await res.json()
+            setGeneralMessages(Array.isArray(data?.data) ? data.data : [])
+        } catch {
+            setGeneralMessages([])
+        } finally {
+            setGeneralLoading(false)
+        }
+    }
+
+    const sendGeneralMessage = () => {
+        if (!generalText.trim() || !socket) return
+        const senderName = user?.nombre || 'Usuario'
+        socket.emit('enviar-mensaje', {
+            text: generalText.trim(),
+            from: senderName,
+            room: 'general'
+        })
+        setGeneralText("")
     }
 
     const fetchUsuarios = async () => {
@@ -216,6 +281,8 @@ const Chat = () => {
 
     const handleOpen = () => {
         setIsOpen(true)
+        setChatMode('private')
+        setView('conversations')
         fetchConversations()
     }
 
@@ -240,7 +307,7 @@ const Chat = () => {
 
                     <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 flex justify-between items-center shadow-md shrink-0">
                         <div className="flex items-center gap-2">
-                            {(view === 'messages' || view === 'newChat') && (
+                            {chatMode === 'private' && (view === 'messages' || view === 'newChat') && (
                                 <button onClick={goBack} className="text-white hover:bg-white hover:bg-opacity-20 p-1.5 rounded-full transition-all">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -249,17 +316,33 @@ const Chat = () => {
                             )}
                             <div>
                                 <h2 className="font-bold text-white text-base leading-tight">
-                                    {view === 'conversations' && 'Mensajes'}
-                                    {view === 'newChat' && 'Nueva conversación'}
-                                    {view === 'messages' && (activeConversation ? getOtherParticipantName(activeConversation) : 'Chat')}
+                                    {chatMode === 'general' && 'Chat General'}
+                                    {chatMode === 'private' && view === 'conversations' && 'Mensajes'}
+                                    {chatMode === 'private' && view === 'newChat' && 'Nueva conversación'}
+                                    {chatMode === 'private' && view === 'messages' && (activeConversation ? getOtherParticipantName(activeConversation) : 'Chat')}
                                 </h2>
-                                {view === 'conversations' && (
+                                {chatMode === 'general' && (
+                                    <p className="text-xs text-indigo-200">{connected ? 'Conectado' : 'Desconectado'} · {onlineUsers.length} online</p>
+                                )}
+                                {chatMode === 'private' && view === 'conversations' && (
                                     <p className="text-xs text-indigo-200">{user?.nombre || ''}</p>
                                 )}
                             </div>
                         </div>
                         <div className="flex items-center gap-1">
-                            {view === 'conversations' && (
+                            {isAdminOrDocente && chatMode === 'private' && view === 'conversations' && (
+                                <button onClick={() => { setChatMode('general'); fetchGeneralMessages() }}
+                                    className="text-xs text-white bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1.5 rounded-full transition-all font-medium">
+                                    General
+                                </button>
+                            )}
+                            {isAdminOrDocente && chatMode === 'general' && (
+                                <button onClick={() => { setChatMode('private'); setView('conversations') }}
+                                    className="text-xs text-white bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1.5 rounded-full transition-all font-medium">
+                                    Privado
+                                </button>
+                            )}
+                            {chatMode === 'private' && view === 'conversations' && (
                                 <button onClick={() => { setView('newChat'); fetchUsuarios() }}
                                     className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-full transition-all">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -275,7 +358,7 @@ const Chat = () => {
                         </div>
                     </div>
 
-                    {view === 'conversations' && (
+                    {chatMode === 'private' && view === 'conversations' && (
                         <div className="flex-1 overflow-y-auto bg-gray-50">
                             {conversations.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4 p-8">
@@ -310,7 +393,7 @@ const Chat = () => {
                         </div>
                     )}
 
-                    {view === 'newChat' && (
+                    {chatMode === 'private' && view === 'newChat' && (
                         <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
                             <div className="p-3 border-b border-gray-100 bg-white shrink-0">
                                 <input
@@ -349,7 +432,71 @@ const Chat = () => {
                         </div>
                     )}
 
-                    {view === 'messages' && (
+                    {chatMode === 'general' && (
+                        <>
+                            <div className="flex gap-1.5 p-2 overflow-x-auto border-b border-gray-100 bg-white shrink-0">
+                                {onlineUsers.filter(u => u.rol === 'admin' || u.rol === 'docente').map((u, i) => (
+                                    <span key={i} className="bg-indigo-100 text-indigo-700 rounded-full px-2.5 py-0.5 text-[11px] font-medium whitespace-nowrap">
+                                        {u.nombre}
+                                    </span>
+                                ))}
+                                {onlineUsers.length === 0 && (
+                                    <span className="text-xs text-gray-400 px-2">Sin usuarios conectados</span>
+                                )}
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+                                {generalLoading ? (
+                                    <div className="flex justify-center items-center h-full">
+                                        <div className="w-7 h-7 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                                    </div>
+                                ) : generalMessages.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
+                                        <p className="text-sm font-semibold">No hay mensajes aún</p>
+                                    </div>
+                                ) : (
+                                    generalMessages.map((msg, i) => (
+                                        <div key={msg._id || i} className="flex flex-col">
+                                            <div className="bg-white rounded-2xl rounded-tl-none shadow-sm border border-gray-100 px-4 py-2.5">
+                                                <div className="flex items-center justify-between mb-0.5">
+                                                    <span className="text-xs font-bold text-indigo-600">{msg.from}</span>
+                                                    <span className="text-[10px] text-gray-400">{formatTime(msg.timestamp)}</span>
+                                                </div>
+                                                <p className="text-sm text-gray-800 break-words leading-relaxed">{msg.text}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            <div className="bg-white border-t border-gray-100 p-3 shrink-0 pb-safe">
+                                <div className="flex gap-2 items-center">
+                                    <input
+                                        type="text"
+                                        placeholder="Escribe un mensaje..."
+                                        value={generalText}
+                                        onChange={e => setGeneralText(e.target.value)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault()
+                                                sendGeneralMessage()
+                                            }
+                                        }}
+                                        className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500 text-sm"
+                                    />
+                                    <button onClick={sendGeneralMessage}
+                                        className="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center justify-center shrink-0">
+                                        <svg className="w-5 h-5 transform rotate-45 -translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    {chatMode === 'private' && view === 'messages' && (
                         <>
                             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
                                 {loadingMsgs ? (

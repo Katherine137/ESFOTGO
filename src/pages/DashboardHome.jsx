@@ -1,4 +1,3 @@
-import Chat from "./Chat"
 const DashboardHome = () => {
     return (
         <div className="container mx-auto">
@@ -39,7 +38,6 @@ const DashboardHome = () => {
                     </div>
                 </div>
             </div>
-            <Chat />
         </div>
     )
 }

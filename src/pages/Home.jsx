@@ -3,7 +3,8 @@ import { CardEvent } from "../components/event/card/CardEvent"
 import Logo from "../assets/Logo.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import esfot from "../assets/esfot.jpeg"
+import esfot21 from "../assets/esfot21.jpeg"
 
 export const Home = () => {
     const [event, setEvents] = useState([]);
@@ -27,6 +28,13 @@ export const Home = () => {
         }
     };
 
+    const scrollToEvent = () => {
+        const contactSection = document.getElementById('event-section'); 
+        if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } 
+    };
+
     const scrollToContact = () => {
         const contactSection = document.getElementById('contact-section'); 
         if (contactSection) {
@@ -41,6 +49,7 @@ export const Home = () => {
                 <ul className="flex gap-5 justify-center my-4 flex-wrap">
                     <li><a href="#" className='font-bold hover:text-sky-500 hover:underline text-blue-800'>HOGAR</a></li>
                     <li><button onClick={scrollToMap} className='font-bold hover:text-sky-500 hover:underline text-blue-800'>MAPA</button></li>
+                    <li><button onClick={scrollToEvent} className='font-bold hover:text-sky-500 hover:underline text-blue-800'>EVENTOS</button></li>
                     <li><button onClick={scrollToContact} className='font-bold hover:text-sky-500 hover:underline text-blue-800'>CONTACTO</button></li>
                 </ul>
                 <ul className="flex justify-center items-center gap-4 my-4">
@@ -51,7 +60,7 @@ export const Home = () => {
 
             <div className="pt-20">
                 <div className="relative w-full max-w-5xl h-[250px] sm:h-[300px] md:h-[380px] lg:h-[480px] rounded-2xl overflow-hidden mx-auto mt-5">
-                    <img src="https://esfot.epn.edu.ec/images/paginas/entradaesfot.jpg" alt="Campus Esfot" className="w-full h-full object-cover"/>
+                    <img src={esfot21} alt="Campus Esfot" className="w-full h-full object-cover"/>
                     
                     <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center px-4 text-center">
                         <br />
@@ -81,7 +90,7 @@ export const Home = () => {
                             <div className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl cursor-pointer hover:shadow-3xl transition-shadow duration-300 group">
                                 {/* Imagen de fondo del mapa */}
                                 <img 
-                                    src="https://esfot.epn.edu.ec/images/paginas/entradaesfot.jpg" 
+                                    src={esfot} 
                                     alt="Mapa Campus" 
                                     className="w-full h-full object-cover blur-sm group-hover:blur-none transition-all duration-300"
                                 />
@@ -117,8 +126,8 @@ export const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                         <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
                             <div className="text-4xl mb-3 text-center">🏫</div>
-                            <h3 className="text-xl font-bold text-blue-950 text-center mb-2">Edificios y Aulas</h3>
-                            <p className="text-gray-600 text-center">Encuentra fácilmente todas las aulas y edificios del campus</p>
+                            <h3 className="text-xl font-bold text-blue-950 text-center mb-2">Aulas</h3>
+                            <p className="text-gray-600 text-center">Encuentra fácilmente todas las aulas del campus</p>
                         </div>
                         
                         <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
@@ -146,7 +155,7 @@ export const Home = () => {
                 </section>
 
                 {/* Card de eventos */}
-                <section>
+                <section id="event-section">
                     <div className="container mx-auto relative mt-8 px-4">
                         <div className='text-red-800 border-2' />
                         <br />
@@ -173,7 +182,7 @@ export const Home = () => {
                                     <span className="text-red-700">ESFOT</span>go
                                 </h2>
                                 <p className="text-gray-400 mb-4">
-                                    Explora el campus de la ESFOT de manera virtual. <br />Descubre cada edificio, laboratorio y espacio de nuestra institución.
+                                    Explora el campus de la ESFOT de manera virtual. <br />Descubre cada laboratorio y espacio de nuestra institución.
                                 </p>
                                 <div className="flex gap-4">
                                     <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors">

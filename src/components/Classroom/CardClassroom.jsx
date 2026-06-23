@@ -35,10 +35,6 @@ export const CardClassroom = ({ aula }) => {
                 <p className="inline-block ml-3">{aula?.tipo}</p>
             </div>    
             
-            <div className="self-start">
-                <b>Edificio:</b>
-                <p className="inline-block ml-3">{aula?.edificio}</p>
-            </div>
         </div>
     )
 }
