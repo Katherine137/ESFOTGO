@@ -3,10 +3,14 @@ import { MdAdd, MdClose } from 'react-icons/md'
 import { CardEvent } from '../components/event/card/CardEvent'
 import FormEvent from '../components/event/form/FormEvent'
 import useEventos from '../hooks/events/useEventos'
+import storeAuth from '../context/storeAuth'
 
 const Event = () => {
     const { eventos, loading, error, obtenerEventos } = useEventos()
     const [mostrarFormulario, setMostrarFormulario] = useState(false)
+    const rol = storeAuth((state) => state.rol)
+
+    const puedeCrearEvento = rol === 'admin' || rol === 'docente'
 
     const handleEventoCreado = () => {
         obtenerEventos()
@@ -18,6 +22,7 @@ const Event = () => {
             <br />
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between flex-wrap gap-4 px-4 sm:px-6 lg:px-8">
                 <h1 className="font-black text-2xl sm:text-3xl md:text-4xl text-blue-950">Eventos</h1>
+                {puedeCrearEvento &&  (
                 <button
                     onClick={() => setMostrarFormulario(true)}
                     className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-950 hover:bg-gray-800 text-white px-4 py-2 rounded-xl font-semibold transition-colors shadow-lg"
@@ -25,6 +30,7 @@ const Event = () => {
                     <MdAdd className="text-xl" />
                     Nuevo Evento
                 </button>
+                )}
             </div>
 
             <br />

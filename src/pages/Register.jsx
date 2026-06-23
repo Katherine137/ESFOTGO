@@ -135,7 +135,7 @@ export const Register = () => {
                     {...register("email", {
                         required: "El correo es obligatorio",
                         pattern: {
-                            value: /^[a-z._%+-]+@epn\.edu\.ec$/,
+                            value: /^[a-zA-Z0-9._%+-]+@epn\.edu\.ec$/,
                             message: "Debe ser un correo institucional @epn.edu.ec solo minusculas "
                         }
                     })}

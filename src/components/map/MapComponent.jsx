@@ -557,7 +557,7 @@ const MapComponent = () => {
             </Section>
 
             {/* ── Rutas DB ── */}
-            <Section title={`Rutas del Campus ${dbRoutes.length ? `(${dbRoutes.length})` : ''}`} icon="🚌" open={secOpen.dbRoutes} onToggle={() => tog('dbRoutes')} accent="indigo">
+            <Section title={`Rutas del Polibus ${dbRoutes.length ? `(${dbRoutes.length})` : ''}`} icon="🚌" open={secOpen.dbRoutes} onToggle={() => tog('dbRoutes')} accent="indigo">
                 <div className="p-2 max-h-60 overflow-y-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: '#cbd5e1 transparent' }}>
                     {loadingDB && (
                         <div className="text-center py-4 text-sm text-gray-400 animate-pulse">Cargando rutas…</div>

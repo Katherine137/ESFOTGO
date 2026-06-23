@@ -16,6 +16,8 @@ const Dashboard = () => {
     
     const [sidebarOpen, setSidebarOpen] = useState(true)
 
+    const visualizarlista = rol === 'admin' || rol === 'docente'
+
     useEffect(() => {
         if (token && rol) {
             profile()
@@ -169,17 +171,18 @@ const Dashboard = () => {
                                     Tutorías
                                 </Link>
                             )}
-
-                            <Link
-                                to='/dashboard/list'
-                                className={`w-full text-center py-3 rounded-lg border-2 shadow-lg transition-all ${
-                                    urlActual.includes('/list')
-                                        ? 'bg-blue-400 text-blue-950 border-blue-500 font-semibold'
-                                        : 'border-white hover:bg-blue-400 text-gray-600'
-                                }`}
-                            >
-                                Listas
-                            </Link>
+                            {visualizarlista && (
+                                <Link
+                                    to='/dashboard/list'
+                                    className={`w-full text-center py-3 rounded-lg border-2 shadow-lg transition-all ${
+                                        urlActual.includes('/list')
+                                            ? 'bg-blue-400 text-blue-950 border-blue-500 font-semibold'
+                                            : 'border-white hover:bg-blue-400 text-gray-600'
+                                    }`}
+                                >
+                                    Listas
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -74,13 +74,6 @@ const ListEvents = () => {
             >
             <MdPublishedWithChanges />
             </button>
-            <button
-            onClick={() => onEliminar(evento._id)}
-            className="text-red-600 hover:text-red-800 text-xl"
-            title="Eliminar evento"
-            >
-            <MdDeleteForever />
-            </button>
         </div>
         </td>
     </tr>
