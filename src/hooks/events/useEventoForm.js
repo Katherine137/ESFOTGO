@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 
@@ -8,6 +8,19 @@ const useEventoForm = (onEventoCreado) => {
     const [message, setMessage] = useState({ type: '', text: '' })
     const [imagenPreview, setImagenPreview] = useState(null)
     const [imagenBase64, setImagenBase64] = useState(null)
+    const [ubicaciones, setUbicaciones] = useState([])
+
+    useEffect(() => {
+        const cargarUbicaciones = async () => {
+            try {
+                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/mapa/ubicaciones`)
+                setUbicaciones(data?.data || [])
+            } catch (error) {
+                console.error('Error al cargar ubicaciones:', error)
+            }
+        }
+        cargarUbicaciones()
+    }, [])
 
     const handleImagenChange = (e) => {
         const file = e.target.files[0]
@@ -47,7 +60,7 @@ const useEventoForm = (onEventoCreado) => {
         }
     }
 
-    return { register, handleSubmit: handleSubmit(onSubmit), errors, loading, message, imagenPreview, handleImagenChange }
+    return { register, handleSubmit: handleSubmit(onSubmit), errors, loading, message, imagenPreview, handleImagenChange, ubicaciones }
 }
 
 export default useEventoForm

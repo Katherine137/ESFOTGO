@@ -9,7 +9,7 @@ const HORARIO_VACIO = { dia: '', horaInicio: '', horaFin: '' }
 export const useTutoriaUpdate = () => {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm()
     const [loading, setLoading] = useState(false)
     const [cargandoDatos, setCargandoDatos] = useState(true)
     const [message, setMessage] = useState({ type: '', text: '' })
@@ -87,7 +87,7 @@ export const useTutoriaUpdate = () => {
     }
 
     return {
-        register, handleSubmit, errors, loading, cargandoDatos, message,
+        register, handleSubmit, errors, loading, cargandoDatos, message, setValue,
         horarios, agregarHorario, eliminarHorario, handleHorarioChange, onSubmit
     }
 }

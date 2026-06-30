@@ -6,7 +6,7 @@ import storeAuth from '../../context/storeAuth'
 const HORARIO_VACIO = { dia: '', horaInicio: '', horaFin: '' }
 
 export const useTutoriaForm = ({ onCreated } = {}) => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm()
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState({ type: '', text: '' })
     const [horarios, setHorarios] = useState([{ ...HORARIO_VACIO }])
@@ -56,7 +56,7 @@ export const useTutoriaForm = ({ onCreated } = {}) => {
     }
 
     return {
-        register, handleSubmit, errors, loading, message,
+        register, handleSubmit, errors, loading, message, setValue,
         horarios, agregarHorario, eliminarHorario, handleHorarioChange, onSubmit
     }
 }

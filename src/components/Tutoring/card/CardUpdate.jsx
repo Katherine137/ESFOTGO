@@ -1,11 +1,42 @@
+import { useEffect, useState } from 'react'
 import { Horario } from '../form/Horario'
 import { useTutoriaUpdate } from '../../../hooks/tutoring/useTutoriaUpdate'
+import storeProfile from '../../../context/storeProfile'
+import axios from 'axios'
+import storeAuth from '../../../context/storeAuth'
+
 
 const CardUpdate = () => {
+    const { user } = storeProfile()
+    const { token } = storeAuth()
+    const [ubicaciones, setUbicaciones] = useState([])
     const {
-        register, handleSubmit, errors, loading, cargandoDatos, message,
+        register, handleSubmit, errors, loading, cargandoDatos, message, setValue,
         horarios, agregarHorario, eliminarHorario, handleHorarioChange, onSubmit
     } = useTutoriaUpdate()
+
+    useEffect(() => {
+        if (user) {
+            setValue(
+                "docente", user._id
+            );
+        }
+    }, [user, setValue]);
+
+    useEffect(() => {
+        const cargarUbicaciones = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/mapa/ubicaciones`
+                const response = await axios.get(url, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                setUbicaciones(response.data?.data || [])
+            } catch (error) {
+                console.error('Error al cargar ubicaciones:', error)
+            }
+        }
+        cargarUbicaciones()
+    }, [token])
 
     if (cargandoDatos) return <p>Cargando tutoría...</p>
 
@@ -32,17 +63,40 @@ const CardUpdate = () => {
 
             <div className="mb-3">
                 <label className="mb-1 block text-sm font-semibold">Docente</label>
-                <input type="text" placeholder="Nombre del docente"
-                    className="block w-full rounded-md border border-blue-500 py-1 px-1.5 text-neutral-950 focus:ring-2 focus:ring-blue-500 outline-none"
-                    {...register('docente', { required: 'El docente es obligatorio' })} disabled={loading} />
-                {errors.docente && <p className="text-red-600 text-xs mt-1">{errors.docente.message}</p>}
+                <input
+                    type="text"
+                    value={`${user?.nombre || ""} ${user?.apellido || ""}`.trim()}
+                    readOnly
+                    className="block w-full rounded-md border border-blue-500 bg-gray-100 py-1 px-1.5 text-neutral-950"
+                />
+
+                <input
+                    type="hidden"
+                    {...register("docente")}
+                    value={user?._id || ""}
+                />
+
+                {errors.docente && (
+                    <p className="text-red-600 text-xs mt-1">
+                        {errors.docente.message}
+                    </p>
+                )}
             </div>
 
             <div className="mb-3">
                 <label className="mb-1 block text-sm font-semibold">Oficina</label>
-                <input type="text" placeholder="Número de oficina"
+                <select
                     className="block w-full rounded-md border border-blue-500 py-1 px-1.5 text-neutral-950 focus:ring-2 focus:ring-blue-500 outline-none"
-                    {...register('oficina', { required: 'La oficina es obligatoria' })} disabled={loading} />
+                    {...register('oficina', { required: 'La oficina es obligatoria' })}
+                    disabled={loading}
+                >
+                    <option value="">Selecciona una ubicación</option>
+                    {ubicaciones.map((ubic) => (
+                        <option key={ubic._id} value={ubic.nombre}>
+                            {ubic.nombre} {ubic.categoria ? `(${ubic.categoria})` : ''}
+                        </option>
+                    ))}
+                </select>
                 {errors.oficina && <p className="text-red-600 text-xs mt-1">{errors.oficina.message}</p>}
             </div>
 
@@ -68,7 +122,7 @@ const CardUpdate = () => {
                     {...register('cupo_maximo')} disabled={loading} />
             </div>
 
-            <HorarioFields
+            <Horario
                 horarios={horarios}
                 onChange={handleHorarioChange}
                 onAgregar={agregarHorario}

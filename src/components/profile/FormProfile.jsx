@@ -67,14 +67,14 @@ const FormularioPerfil = () => {
 
             <div className="flex justify-center">
                 <label htmlFor="imagenPerfil" className="relative cursor-pointer group">
-                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-slate-100 bg-slate-50 flex items-center justify-center">
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-sky-950 bg-slate-50 flex items-center justify-center">
                         {previewImagen ? (
                             <img src={previewImagen} alt="Foto de perfil" className="w-full h-full object-cover" />
                         ) : (
                             <span className="text-3xl text-slate-300">👤</span>
                         )}
                     </div>
-                    <div className="absolute bottom-0 right-0 bg-blue-950 text-white rounded-full p-1.5 group-hover:bg-blue-900 transition-colors shadow-md">
+                    <div className="absolute bottom-0 right-0 bg-sky-950 text-white rounded-full p-1.5 group-hover:bg-blue-900 transition-colors shadow-md">
                         <MdCameraAlt className="text-sm" />
                     </div>
                     <input
@@ -91,7 +91,7 @@ const FormularioPerfil = () => {
                 <label className="mb-1 block text-sm font-semibold text-slate-700">Nombre</label>
                 <input 
                     type="text" 
-                    className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-neutral-950 outline-none focus:border-blue-950 focus:bg-white transition-all"
+                    className="block w-full rounded-xl border border-sky-950 bg-slate-50 py-2.5 px-4 text-neutral-950 outline-none focus:border-blue-950 focus:bg-white transition-all"
                     {...register("nombre", { 
                         required: "El nombre es obligatorio",
                         pattern: {
@@ -108,7 +108,7 @@ const FormularioPerfil = () => {
                 <label className="mb-1 block text-sm font-semibold text-slate-700">Apellido</label>
                 <input 
                     type="text" 
-                    className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-neutral-950 outline-none focus:border-blue-950 focus:bg-white transition-all"
+                    className="block w-full rounded-xl border border-sky-950 bg-slate-50 py-2.5 px-4 text-neutral-950 outline-none focus:border-blue-950 focus:bg-white transition-all"
                     {...register("apellido", { 
                         required: "El apellido es obligatorio",
                         pattern: {
@@ -125,7 +125,7 @@ const FormularioPerfil = () => {
                 <label className="mb-1 block text-sm font-semibold text-slate-700">Teléfono</label>
                 <input 
                     type="text" 
-                    className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-neutral-950 outline-none focus:border-blue-950 focus:bg-white transition-all"
+                    className="block w-full rounded-xl border border-sky-950 bg-slate-50 py-2.5 px-4 text-neutral-950 outline-none focus:border-blue-950 focus:bg-white transition-all"
                     {...register("telefono", { 
                         required: "El teléfono es obligatorio",
                         pattern: {

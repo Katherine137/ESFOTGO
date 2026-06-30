@@ -15,6 +15,19 @@ const useEventoUpdate = () => {
     const [imagenPreview, setImagenPreview] = useState(null)
     const [imagenBase64, setImagenBase64] = useState(null)
     const headers = { Authorization: `Bearer ${token}` }
+    const [ubicaciones, setUbicaciones] = useState([])
+
+    useEffect(() => {
+        const cargarUbicaciones = async () => {
+            try {
+                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/mapa/ubicaciones`)
+                setUbicaciones(data?.data || [])
+            } catch (error) {
+                console.error('Error al cargar ubicaciones:', error)
+            }
+        }
+        cargarUbicaciones()
+    }, [])
 
     useEffect(() => {
         if (!id || !token) return
@@ -72,7 +85,7 @@ const useEventoUpdate = () => {
         }
     }
 
-    return { register, handleSubmit: handleSubmit(onSubmit), errors, loading, loadingData, message, imagenPreview, handleImagenChange, navigate }
+    return { register, handleSubmit: handleSubmit(onSubmit), errors, loading, loadingData, message, imagenPreview, handleImagenChange, navigate, ubicaciones }
 }
 
 export default useEventoUpdate

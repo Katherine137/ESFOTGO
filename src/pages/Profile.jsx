@@ -67,7 +67,17 @@ const Profile = () => {
                             <CardPassword />
                         </div>
                     )}
-                    
+                </div>
+
+                <div className="flex justify-center mt-auto pt-10">
+                    <img 
+                        src="/src/assets/profile.png" 
+                        alt="" 
+                        className="w-55"
+                        style={{
+                            animation: 'flotar 3s ease-in-out infinite'
+                        }}
+                    />
                 </div>
             </main>
 

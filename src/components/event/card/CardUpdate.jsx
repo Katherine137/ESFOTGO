@@ -7,7 +7,7 @@ const CardUpdate = () => {
         register, handleSubmit, errors,
         loading, loadingData, message,
         imagenPreview, handleImagenChange,
-        navigate,
+        navigate, ubicaciones
     } = useEventoUpdate()
 
     if (loadingData) return (
@@ -112,19 +112,20 @@ const CardUpdate = () => {
 
             {/* Ubicación */}
             <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
-            <input
-                type="text"
-                placeholder="Ubicación del evento"
-                className={inputClass}
-                disabled={loading}
-                {...register('ubicacion', {
-                required: 'La ubicación es obligatoria',
-                minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-                maxLength: { value: 200, message: 'Máximo 200 caracteres' },
-                })}
-            />
-            {errors.ubicacion && <span className="text-red-600 text-xs">{errors.ubicacion.message}</span>}
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
+                <select
+                    className={inputClass}
+                    disabled={loading}
+                    {...register('ubicacion', { required: 'La ubicación es obligatoria' })}
+                >
+                    <option value="">Selecciona una ubicación</option>
+                    {ubicaciones.map((ubic) => (
+                        <option key={ubic._id} value={ubic.nombre}>
+                            {ubic.nombre} {ubic.categoria ? `(${ubic.categoria})` : ''}
+                        </option>
+                    ))}
+                </select>
+                {errors.ubicacion && <span className="text-red-600 text-xs">{errors.ubicacion.message}</span>}
             </div>
 
             {/* Información */}

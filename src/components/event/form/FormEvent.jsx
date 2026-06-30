@@ -1,7 +1,7 @@
 import useEventoForm from '../../../hooks/events/useEventoForm'
 
 const FormEvent = ({ onEventoCreado }) => {
-    const { register, handleSubmit, errors, loading, message, imagenPreview, handleImagenChange } = useEventoForm(onEventoCreado)
+    const { register, handleSubmit, errors, loading, message, imagenPreview, handleImagenChange, ubicaciones } = useEventoForm(onEventoCreado)
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-900">
@@ -76,7 +76,6 @@ const FormEvent = ({ onEventoCreado }) => {
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Hora</label>
                         <input
                             type="time"
-                            min={new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
                             {...register("hora", { required: "La hora es obligatoria" })}
                             disabled={loading}
@@ -86,16 +85,18 @@ const FormEvent = ({ onEventoCreado }) => {
 
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
-                    <input
-                        type="text"
-                        placeholder="Ej: Auditorio de Sistemas"
+                    <select
                         className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("ubicacion", { 
-                            required: "La ubicación es obligatoria",
-                            minLength: { value: 3, message: "La ubicación debe tener al menos 3 caracteres" },
-                            maxLength: { value: 200, message: "La ubicación no puede superar 200 caracteres" }
-                        })}
-                    />
+                        {...register("ubicacion", { required: "La ubicación es obligatoria" })}
+                        disabled={loading}
+                    >
+                        <option value="">Selecciona una ubicación</option>
+                        {ubicaciones.map((ubic) => (
+                            <option key={ubic._id} value={ubic.nombre}>
+                                {ubic.nombre} {ubic.categoria ? `(${ubic.categoria})` : ''}
+                            </option>
+                        ))}
+                    </select>
                     {errors.ubicacion && <span className="text-red-600 text-xs">{errors.ubicacion.message}</span>}
                 </div>
 

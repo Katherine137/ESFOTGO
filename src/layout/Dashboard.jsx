@@ -95,7 +95,7 @@ const Dashboard = () => {
                 >
                     <div className="px-5 py-4 min-w-64">
                         <img
-                            className="h-auto w-full max-w-[200px] mx-auto rounded-full border-black border-2 mb-4"
+                            className="h-[200px] w-[200px] object-cover mx-auto rounded-full border-black border-2 mb-4"
                             src={user?.imagen || user?.photo || "/Buho_1.png"}
                             alt="usuario"
                         />
@@ -107,7 +107,7 @@ const Dashboard = () => {
                         </p>
 
                         <p className='text-slate-400 text-center my-4 text-sm'>
-                            Rol - {typeof rol === 'string' ? rol : rol?.nombre || rol?.name || 'N/A'}
+                            Rol - {String(rol?.nombre ?? rol?.name ?? rol ?? 'N/A')}
                         </p>
 
                         <div className="flex flex-col gap-3 mt-6">

@@ -17,10 +17,16 @@ body {
     transform: translateY(-10px) scale(1.03);
     filter: hue-rotate(10deg);
   }
-  100% {
+  100% { 
     transform: translateY(0px) scale(1);
     filter: hue-rotate(0deg);
   }
+}
+
+@keyframes flotar {
+    0%   { transform: translateY(0px) rotate(0deg); }
+    50%  { transform: translateY(-15px) rotate(10deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
 }
 
 .flame-animation {
