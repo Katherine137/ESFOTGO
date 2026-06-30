@@ -2,6 +2,7 @@ import { useState } from 'react'
 import CardPassword from '../components/profile/CardPassword'
 import { CardProfile } from '../components/profile/CardProfile'
 import FormProfile from '../components/profile/FormProfile'
+import profileImg from '../assets/profile.png'
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('profile')
@@ -71,7 +72,7 @@ const Profile = () => {
 
                 <div className="flex justify-center mt-auto pt-10">
                     <img 
-                        src="/src/assets/profile.png" 
+                        src={profileImg} 
                         alt="" 
                         className="w-55"
                         style={{
