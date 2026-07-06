@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MdAdd, MdClose } from 'react-icons/md'
 import storeAuth from '../context/storeAuth'
-import { CardTutoring } from '../components/Tutoring/card/CardTutoring'
-import FormTutoring from '../components/Tutoring/form/FormTutoring'
+import TutoriaCard from '../components/tutoring/TutoriaCard'
+import TutoriaForm from '../components/tutoring/TutoriaForm'
 import { useTutorias } from '../hooks/tutoring/useTutorias'
 
 const Tutoring = () => {
@@ -45,20 +45,16 @@ const Tutoring = () => {
                 </div>
             ) : (
                 <div className="container mx-auto px-4 mb-12">
-                    <h2 className="font-black text-xl sm:text-2xl text-blue-950 mb-6 sm:mb-8">
-                        Mis Tutorías
-                    </h2>
+                    <h2 className="font-black text-xl sm:text-2xl text-blue-950 mb-6 sm:mb-8">Mis Tutorías</h2>
                     <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100">
                         {tutorias.length > 0 ? (
                             tutorias.map(tutoria => (
-                                <div key={tutoria._id} className="min-w-[300px] md:min-w-[350px]">
-                                    <CardTutoring tutoria={tutoria} />
+                                <div key={tutoria._id} className="min-w-[300px] md:min-w-[350px] snap-start">
+                                    <TutoriaCard tutoria={tutoria} />
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-500 text-center w-full py-8">
-                                No tienes tutorías registradas aún
-                            </p>
+                            <p className="text-gray-500 text-center w-full py-8">No tienes tutorías registradas aún</p>
                         )}
                     </div>
                 </div>
@@ -80,7 +76,7 @@ const Tutoring = () => {
                         >
                             <MdClose className="text-xl" />
                         </button>
-                        <FormTutoring onCreated={handleTutoriaCreada} />
+                        <TutoriaForm onCreated={handleTutoriaCreada} />
                     </div>
                 </div>
             )}

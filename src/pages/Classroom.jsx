@@ -1,81 +1,46 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router"
-import storeAuth from "../context/storeAuth"
-import { CardClassroom } from "../components/Classroom/CardClassroom"
-import CardUpdate from "../components/Classroom/CardUpdate"
-import FormClassroom from "../components/Classroom/FormClassroom"
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import storeAuth from '../context/storeAuth'
+import AulaCard from '../components/classroom/AulaCard'
+import AulaForm from '../components/classroom/AulaForm'
+import AulaCardUpdate from '../components/classroom/AulaCardUpdate'
+import useAulas from '../hooks/classroom/useAulas'
 
 const Classroom = () => {
-    const [clases, setClases] = useState([])
-    const [loading, setloading] = useState(true)
-    const [error, setError] = useState(null)
-
-    const navigate = useNavigate()
-    const rol = localStorage.getItem('rol')
-
-    const obtenerclases = async () => {
-        setloading(true)
-        setError(null)
-        try {
-            const baseURL = import.meta.env.VITE_BACKEND_URL
-            const response = await axios.get(`${baseURL}/clases`)
-
-            setClases(response.data)
-        } catch (error) {
-            console.error('Error al obtener evento0s:', error)
-            setError('la ruta/clases no fue encontrada en el servidor.')
-        } finally{
-            setloading(false)
-        }
-    }
+    const navigate  = useNavigate()
+    const { rol }   = storeAuth()
+    const { aulas, fetchAulas } = useAulas()
 
     useEffect(() => {
-        if (rol !== 'admin'){
-            navigate('/dashboard')
-        } else {
-            obtenerclases()
-        }
-        
-        if (!rol) {
-            return <div className="p-8 text-center text-blue-950 font-bold">Cargando permisos...</div>
-        }
-        if (rol === null) return
+        if (rol && rol !== 'admin') navigate('/dashboard')
     }, [rol, navigate])
 
-    const onClaseCreada = () => {
-        obtenerclases()
-    }
+    if (!rol || rol !== 'admin') return null
 
     return (
         <>
-            <div>
-                <h1 className='font-black text-4xl text-blue-950'>Aula</h1>
-                <br />
+            <div className="px-4 py-6">
+                <h1 className="font-black text-4xl text-blue-950">Aulas</h1>
             </div>
 
-            <div className='flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap'>
-                <div className="w-full md:w-1/2">
-                    <CardClassroom/>
-                </div>
-
-                <div className="w-full md:w-1/2">
-                    <CardClassroom/>
-                </div>
+            <div className="flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap px-4">
+                {aulas.slice(0, 2).map(aula => (
+                    <div key={aula._id} className="w-full md:w-1/2">
+                        <AulaCard aula={aula} />
+                    </div>
+                ))}
             </div>
 
             <br />
 
-            <div className='flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap'>
-                <div className='w-full md:w-1/2'>
-                    <FormClassroom onClaseCreada={onClaseCreada}/>
+            <div className="flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap px-4">
+                <div className="w-full md:w-1/2">
+                    <AulaForm onCreated={fetchAulas} />
                 </div>
-
-                <div className='w-full md:w-1/2 '>
-                    <CardUpdate/>
+                <div className="w-full md:w-1/2">
+                    <AulaCardUpdate />
                 </div>
-        
             </div>
-
         </>
     )
 }

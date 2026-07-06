@@ -1,26 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { MdAdd, MdClose } from 'react-icons/md'
 import storeAuth from '../context/storeAuth'
-import { CardTutoring } from '../components/Tutoring/card/CardTutoring'
+import TutoriaCard from '../components/tutoring/TutoriaCard'
 import { useTutorias } from '../hooks/tutoring/useTutorias'
 
 const Tutoria = () => {
     const { rol } = storeAuth()
     const navigate = useNavigate()
-    const { tutorias, loading, fetchTutorias } = useTutorias()
-    const [mostrarFormulario, setMostrarFormulario] = useState(false)
+    const { tutorias, loading } = useTutorias()
 
     useEffect(() => {
         if (rol && rol !== 'user') navigate('/dashboard')
     }, [rol, navigate])
 
     if (!rol || rol !== 'user') return null
-
-    const handleTutoriaCreada = () => {
-        fetchTutorias()
-        setMostrarFormulario(false)
-    }
 
     return (
         <>
@@ -40,14 +33,12 @@ const Tutoria = () => {
                     <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100">
                         {tutorias.length > 0 ? (
                             tutorias.map(tutoria => (
-                                <div key={tutoria._id} className="min-w-[300px] md:min-w-[350px]">
-                                    <CardTutoring tutoria={tutoria} />
+                                <div key={tutoria._id} className="min-w-[300px] md:min-w-[350px] snap-start">
+                                    <TutoriaCard tutoria={tutoria} />
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-500 text-center w-full py-8">
-                                No tienes tutorías registradas aún
-                            </p>
+                            <p className="text-gray-500 text-center w-full py-8">No hay tutorías disponibles aún</p>
                         )}
                     </div>
                 </div>

@@ -1,4 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import { Home } from './pages/Home'
 import Login from './pages/Login'
 import { Forgot } from './pages/Forgot'
@@ -9,27 +13,27 @@ import Dashboard from './layout/Dashboard'
 import Profile from './pages/Profile'
 import Event from './pages/Event'
 import Chat from './pages/Chat'
-import PublicRoute from './routes/PublicRoute'
-import ProtectedRoute from './routes/ProtectedRoute'
-import { useEffect } from 'react'
-import storeProfile from './context/storeProfile'
-import storeAuth from './context/storeAuth'
-import DashboardHome from './pages/DashboardHome'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import Classroom from './pages/Classroom'
 import Tutoring from './pages/Tutoring'
-import List from './pages/List'
-import ListClassroom from './components/list/ListClassroom'
-import ListEvents from './components/event/list/ListEvents'
-import ListTeacher from './components/list/ListTeacher'
-import ListStudent from './components/list/ListStudents'
-import MapCreate from './components/map/Mapcreate'
-import CardUpdateE from './components/event/card/CardUpdate'
-import CardUpdateT from './components/Tutoring/card/CardUpdate'
-import ListTutoring from './components/Tutoring/list/ListTutoring'
-import ListRouts from './components/list/ListRutas'
 import Tutoria from './pages/Tutoria'
+import List from './pages/List'
+import DashboardHome from './pages/DashboardHome'
+
+import PublicRoute from './routes/PublicRoute'
+import ProtectedRoute from './routes/ProtectedRoute'
+
+import EventoList from './components/event/EventoList'
+import EventoCardUpdate from './components/event/EventoCardUpdate'
+import TutoriaList from './components/tutoring/TutoriaList'
+import TutoriaCardUpdate from './components/tutoring/TutoriaCardUpdate'
+import AulaList from './components/classroom/AulaList'
+import DocenteList from './components/teacher/DocenteList'
+import EstudianteList from './components/student/EstudianteList'
+import RutasList from './components/ruta/RutaList'
+import MapCreate from './components/map/Mapcreate'
+
+import storeProfile from './context/storeProfile'
+import storeAuth from './context/storeAuth'
 
 function App() {
   const { profile } = storeProfile()
@@ -63,17 +67,19 @@ function App() {
           <Route path='event' element={<Event/>}/>
           <Route path='classroom' element={<Classroom/>}/>
           <Route path='tutoring' element={<Tutoring/>}/>
-          <Route path='actualizarevento/:id' element={<CardUpdateE/>}/>
-          <Route path='actualizartutoria/:id' element={<CardUpdateT/>}/>
-          <Route path='list' element={<List/>}/>
-          <Route path='list/aulas' element={<ListClassroom/>}/>
-          <Route path='list/eventos' element={<ListEvents/>}/>
-          <Route path='list/docentes' element={<ListTeacher/>}/>
-          <Route path='list/estudiantes' element={<ListStudent/>}/>
-          <Route path='list/tutorias' element={<ListTutoring/>}/>
-          <Route path='list/rutas' element={<ListRouts/>}/>
-          <Route path='mapcreate' element={<MapCreate/>}/>
           <Route path='tutoria' element={<Tutoria/>}/>
+          <Route path='actualizarevento/:id' element={<EventoCardUpdate />}/>
+          <Route path='actualizartutoria/:id' element={<TutoriaCardUpdate />}/>
+          <Route path='mapcreate' element={<MapCreate/>}/>
+          <Route path='list' element={<List/>}/>
+          <Route path='list/aulas' element={<AulaList/>}/>
+          <Route path='list/eventos' element={<EventoList />}/>
+          <Route path='list/docentes' element={<DocenteList/>}/>
+          <Route path='list/estudiantes' element={<EstudianteList/>}/>
+          <Route path='list/tutorias' element={<TutoriaList />}/>
+          <Route path='list/rutas' element={<RutasList/>}/>
+          
+          
         </Route>
       </Routes>
 
