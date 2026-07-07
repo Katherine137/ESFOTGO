@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { MdAdd, MdClose } from 'react-icons/md'
 import storeAuth from '../context/storeAuth'
-import TutoriaCard from '../components/tutoring/TutoriaCard'
-import TutoriaForm from '../components/tutoring/TutoriaForm'
+import TutoriaCard from '../components/Tutoring/TutoriaCard'
+import TutoriaForm from '../components/Tutoring/TutoriaForm'
 import { useTutorias } from '../hooks/tutoring/useTutorias'
 
 const Tutoring = () => {

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import storeAuth from '../context/storeAuth'
-import TutoriaCard from '../components/tutoring/TutoriaCard'
+import TutoriaCard from '../components/Tutoring/TutoriaCard'
 import { useTutorias } from '../hooks/tutoring/useTutorias'
 
 const Tutoria = () => {
