@@ -24,7 +24,7 @@ import ProtectedRoute from './routes/ProtectedRoute'
 
 import EventoList from './components/event/EventoList'
 import EventoCardUpdate from './components/event/EventoCardUpdate'
-import TutoriaList from './components/tutoring/TutoriaList'
+import TutoriaList from './components/Tutoring/TutoriaList'
 import TutoriaCardUpdate from './components/tutoring/TutoriaCardUpdate'
 import AulaList from './components/classroom/AulaList'
 import DocenteList from './components/teacher/DocenteList'
