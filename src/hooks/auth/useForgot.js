@@ -8,13 +8,24 @@ const useForgot = () => {
     const [loading, setLoading] = useState(false)
 
     const onSubmit = async (dataForm) => {
+        console.log('=== FORM DATA ===')
+        console.log('dataForm completo:', dataForm)
+        console.log('email extraído:', dataForm.email)
+        
         setLoading(true)
         try {
             const response = await authService.recuperarPassword(dataForm.email)
+            console.log('Respuesta exitosa:', response)
             toast.success(response?.msg || 'Correo enviado, revisa tu bandeja de entrada')
             reset()
         } catch (error) {
-            console.error('Error completo:', error.response?.data || error.message)
+            console.error('=== ERROR COMPLETO ===')
+            console.error('Status:', error.response?.status)
+            console.error('Data:', error.response?.data)
+            console.error('URL intentada:', error.config?.url)
+            console.error('Body enviado:', error.config?.data)
+            console.error('Message:', error.message)
+            
             toast.error(
                 error.response?.data?.msg ||
                 error.response?.data?.error ||
