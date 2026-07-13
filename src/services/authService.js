@@ -22,7 +22,16 @@ export const authService = {
         return data
     },
     recuperarPassword: async (email) => {
-        const { data } = await axios.post(`${baseURL}/recuperarpassword`, { email })
+        const url = `${baseURL}/recuperarpassword`
+        
+        console.log('=== DEBUG FORGOT ===')
+        console.log('URL llamada:', url)
+        console.log('Email enviado:', email)
+        console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL)
+        
+        const { data } = await axios.post(url, { email })
+        
+        console.log('Respuesta del servidor:', data)
         return data
     },
     verificarToken: async (token) => {
